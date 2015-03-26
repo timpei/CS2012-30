@@ -51,6 +51,10 @@ def init_db():
         db.commit()
 
 
+"""
+WEB PAGES
+"""
+
 @app.route('/')
 def login():
     return render_template('login.html')
@@ -75,7 +79,7 @@ def submitLogin():
 def userDashboard(username):
     return render_template('user.html', user=username)
 
-# runs the main 
+# starts the server 
 if __name__ == '__main__':
 
     # first check to see of the machine has set an environment variable for port
