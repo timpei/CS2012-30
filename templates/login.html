@@ -1,4 +1,41 @@
 {% extends "base.html" %}
 {% block body %}
-    <p>Hello World!</p>
+
+    <link rel="stylesheet" href="/static/homepage.css">
+
+    <div class="container">
+        <div class="header clearfix">
+            <h3 class="text-muted">flashcards</h3>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">User Login</div>
+            <div class="panel-body">
+                <p class="lead">Welcome to flashcards, a tool for language learning.</p>
+
+                <form method="post" action="/submit_login">
+                  <input class="form-control" type="text" name="username" placeholder="username"/><br />
+                  <input class="btn btn-success" type="submit" />
+                </form>
+            </div>     
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Admin Login</div>
+            <div class="panel-body">
+                <p>(admin, adm1n)</p>
+                <form method="post" action="/submit_admin_login">
+                  <input class="form-control" type="text" name="username" placeholder="username"/><br />
+                  <input class="form-control" type="password" name="password" placeholder="password"/><br />
+                  <input class="btn btn-success" type="submit" />
+                </form>
+            </div>     
+        </div>
+
+        <footer class="footer">
+            <hr />
+            <p>© flashcards</p>
+        </footer>
+
+    </div>
 {% endblock %}
