@@ -37,3 +37,13 @@ CREATE TABLE Flashcard(
 	setID INTEGER REFERENCES CardSet(setID),
 	cardID INTEGER PRIMARY KEY AUTOINCREMENT
 );
+
+INSERT INTO User(username, firstName, lastName, email, birthday, password, isAdmin, avatar, lastLogin, registerDate)
+VALUES('admin', 'John', 'Smith', 'john@u.nus.edu', 01-01-1990, 'adm1n', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+
+INSERT INTO User(username, firstName, lastName, email, birthday, password, isAdmin, avatar, lastLogin, registerDate)
+VALUES('sumin', 'Sumin', 'Kang', 'sumin@u.nus.edu', 21-05-1993, 'kang', 0, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO User(username, firstName, lastName, email, birthday, password, isAdmin, avatar, lastLogin, registerDate)
+VALUES('tim', 'Tim', 'Pei', 'tim@u.nus.edu', 29-04-1993, 'pei', 0, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
