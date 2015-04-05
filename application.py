@@ -1,6 +1,7 @@
 import os
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, g
+import consts
 
 # this is the path of the sqlite3 db file
 DATABASE = 'tmp/flashcard.db'
@@ -64,12 +65,12 @@ def submitLogin():
     # get the post variable for username (from the form)
     username=request.form['username']
 
-    user = query_db('SELECT * FROM users WHERE username = ?', 
+    user = query_db('SELECT * FROM User WHERE username = ?', 
                     [username], one=True)
 
     # add the user into the database if it doesn't exist
     if user is None:
-        get_db().execute('INSERT INTO users (username) VALUES (?)',
+        get_db().execute('INSERT INTO User (username) VALUES (?)',
                      [username])
         get_db().commit()
 
@@ -78,6 +79,17 @@ def submitLogin():
 @app.route('/user/<username>')
 def userDashboard(username):
     return render_template('user.html', user=username)
+
+@app.route('/user/<username>/create')
+def createUser(username):
+    user = query_db('SELECT * FROM User WHERE username = ?', 
+                    [username], one=True)
+
+    return render_template('create.html', user=user, 
+                                        languages=consts.LANGUAGES,
+                                        categories=consts.CATEGORIES)
+
+
 
 # starts the server 
 if __name__ == '__main__':
