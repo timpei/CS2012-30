@@ -1,41 +1,88 @@
 {% extends "base.html" %}
 {% block body %}
 
-    <link rel="stylesheet" href="/static/css/homepage.css">
+<link rel="stylesheet" href="/static/css/homepage.css">
 
-    <div class="container">
-        <div class="header clearfix">
-            <h3 class="text-muted">flashcards</h3>
-        </div>
-
-        <div class="panel panel-default">
-            <div class="panel-heading">User Login</div>
-            <div class="panel-body">
-                <p class="lead">Welcome to flashcards, a tool for language learning.</p>
-
-                <form method="post" action="/submit_login">
-                  <input class="form-control" type="text" name="username" placeholder="username"/><br />
-                  <input class="btn btn-success" type="submit" />
-                </form>
-            </div>     
-        </div>
-
-        <div class="panel panel-default">
-            <div class="panel-heading">Admin Login</div>
-            <div class="panel-body">
-                <p>(admin, adm1n)</p>
-                <form method="post" action="/submit_admin_login">
-                  <input class="form-control" type="text" name="username" placeholder="username"/><br />
-                  <input class="form-control" type="password" name="password" placeholder="password"/><br />
-                  <input class="btn btn-success" type="submit" />
-                </form>
-            </div>     
-        </div>
-
-        <footer class="footer">
-            <hr />
-            <p>© flashcards</p>
-        </footer>
-
+<div class="container">
+    <div class="header clearfix">
+        <h3 class="text-muted">flashcards</h3>
     </div>
+
+    {% if failed %}
+    <div class="alert alert-danger" role="alert">
+        Your username or password is incorrect.
+    </div>
+    {% endif %}
+
+    {% if signUp %}
+        {% if success %}
+            <div class="alert alert-success" role="alert">Sign up was successful!</div>
+        {% else %}
+            <div class="alert alert-danger" role="alert">Sign up was unsuccessful.</div>
+        {% endif %}
+    {% endif %}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">User Login</div>
+        <div class="panel-body">
+            <p class="lead">Welcome to flashcards, a tool for language learning.</p>
+            <form method="post" action="/submit_login">
+                <input class="form-control" type="text" name="username" placeholder="Username"/><br />
+                <input class="form-control" type="password" name="password" placeholder="Password"/><br />
+                <input class="btn btn-success" type="submit" />
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Sign up</div>
+        <div class="panel-body">
+            <p class="lead">Create a new account.</p>
+
+            <form method="post" action="/submit_signup">
+                <input class="form-control" type="text" name="username" placeholder="Username"/><br/>
+                <input class="form-control" type="password" name="password" placeholder="Password"/><br/>
+                <input class="form-control" type="text" name="firstname" placeholder="First Name"/><br/>
+                <input class="form-control" type="text" name="lastname" placeholder="Last Name"/><br/>
+                <input class="form-control" type="text" name="email" placeholder="Email"/><br/>
+                <input class="form-control" type="text" name="birthday" placeholder="Date of Birth (dd-mm-yyyy)"/><br/>
+                <div align="middle">
+                    <label class="radio-inline">
+                        <input type="radio" name="inlineRadio" id="radio1" value="1"/>
+                        <label for="radio1" style="background-color: red"></label>
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="inlineRadio" id="radio2" value="2"/>
+                        <label for="radio2" style="background-color: orange"></label>
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="inlineRadio" id="radio3" value="3"/>
+                        <label for="radio3" style="background-color: yellow"></label>
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="inlineRadio" id="radio4" value="4"/>
+                        <label for="radio4" style="background-color: blue"></label>
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="inlineRadio" id="radio5" value="5"/>
+                        <label for="radio5" style="background-color: purple"></label>
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="inlineRadio" id="radio6" value="6"/>
+                        <label for="radio6" style="background-color: black"></label>
+                    </label>
+                </div>
+                <br/>
+
+                <input class="btn btn-success" type="submit"/>
+            </form>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <hr/>
+        <p>© flashcards</p>
+    </footer>
+
+</div>
 {% endblock %}

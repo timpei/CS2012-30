@@ -1,14 +1,12 @@
 import os
 import sqlite3
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, g
+
 import consts
 
 # this is the path of the sqlite3 db file
 DATABASE = 'tmp/flashcard.db'
-
-# the admin credentials is hardcoded for simulation purposes
-ADMIN_USERNAME = 'admin'
-ADMIN_PASS = 'adm1n'
 
 # this is an attribute that will be used by flask
 # setting DEBUG to true will allow you to trace server activities from terminal
@@ -64,17 +62,45 @@ def login():
 def submitLogin():
     # get the post variable for username (from the form)
     username=request.form['username']
+    password=request.form['password']
 
-    user = query_db('SELECT * FROM User WHERE username = ?', 
+    # get user information
+    user = query_db('SELECT * FROM User WHERE username = ?',
                     [username], one=True)
 
-    # add the user into the database if it doesn't exist
-    if user is None:
-        get_db().execute('INSERT INTO User (username) VALUES (?)',
-                     [username])
-        get_db().commit()
+    # if user doesn't exist or password is incorrect
+    # TODO(sumin): Decode password
+    if user is None or user[5] != password:
+        return render_template('login.html', failed=True)
 
     return redirect(url_for('userDashboard', username=username))
+
+@app.route('/submit_signup', methods=['POST'])
+def submitSignup():
+    # get all the sign up information from the form
+    username=request.form['username']
+    password=request.form['password']
+    firstname=request.form['firstname']
+    lastname=request.form['lastname']
+    email=request.form['email']
+    birthday=request.form['birthday']
+    avatar=request.form['inlineRadio']
+
+    # TODO(sumin): Encode password
+    # add the user into the database if it doesn't exist
+    get_db().execute('INSERT INTO User '
+                     '(username, firstName, lastName, email, birthday, password,'
+                     'isAdmin, avatar, lastLogin, registerDate) VALUES '
+                     '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                     [username, firstname, lastname, email, birthday, password,
+                      False, avatar, datetime.now(), datetime.now()])
+    get_db().commit()
+
+    # boolean for insert success (always success for now)
+    # TODO(sumin): Check the db execute function to see if insert was successful
+    success=True
+
+    return render_template('login.html', signUp=True, success=success)
 
 @app.route('/user/<username>')
 def userDashboard(username):
