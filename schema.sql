@@ -25,7 +25,7 @@ CREATE TABLE CardSet (
 	setID INTEGER PRIMARY KEY AUTOINCREMENT,
 	title VARCHAR(255) NOT NULL,
 	description TEXT,
-	language INTEGER REFERENCES Language(landID),
+	language INTEGER REFERENCES Language(langID),
 	creator REFERENCES User(username),
 	lastUpdate DATETIME NOT NULL,
 	category INTEGER REFERENCES Category(catID)
