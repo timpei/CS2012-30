@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% block header %}flashcards{% endblock %}
+
 {% block body %}
 
     <link rel="stylesheet" href="/static/css/create.css">
@@ -7,16 +10,11 @@
     <script type="text/javascript" src="/static/lib/angular.min.js"></script>
     <script type="text/javascript" src="/static/js/createSet.js"></script>
 
-    <div class="container" ng-app="createSetApp">
-        <div class="header clearfix">
-            <h3 class="text-muted">flashcards</h3>
-        </div>
-
         <h1>New Set</h1>
         <hr />
-        
-        <form class="form-horizontal" action="/create_set/{{user.username}}" ng-controller="formController">
-            <h1>{[{test}]}</h1>
+
+        <form class="form-horizontal" action="/create_set/{{user.username}}"
+              ng-app="createSetApp" ng-controller="formController">
             <div class="form-group">
                 <label class="col-md-2 control-label">Set Name</label>
                 <div class="col-md-10">
@@ -55,7 +53,7 @@
                 </select>
                 </div>
             </div>
-            <h3>Flashcards</h3>
+            <br/>
             <table class="table table-striped" id="flashcards">
                 <tr>
                     <th>#</th>
@@ -90,5 +88,4 @@
             </table>
             <a class="btn btn-bg btn-primary" ng-click="submitCreate()">Create Set</a>
         </form>
-    </div>
 {% endblock %}

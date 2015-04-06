@@ -103,7 +103,6 @@ def submitSignup():
 
     return render_template('login.html', signUp=True, success=success)
 
-# TODO(tim): add html manner if banner=create_success
 @app.route('/user/<username>')
 def userDashboard(username):
     banner = request.args.get('banner')
@@ -121,6 +120,7 @@ def userDashboard(username):
     return render_template('user.html', languages=languages, user=user, myCardSets=myCardSets,
                            allCardSets=allCardSets, message=bannerMessage)
 
+# TODO(tim): Change add card button ui (put it on top of the delete button)
 @app.route('/user/<username>/create')
 def createSet(username):
     user = query_db('SELECT * FROM User WHERE username = ?', 
