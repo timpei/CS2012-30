@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block header %}flashcards - Hello {{username}}!{% endblock %}
+{% block header %}flashcards - Hello {{user.firstName}}!{% endblock %}
 
 {% block body %}
     <link rel="stylesheet" href="/static/user.css">
@@ -14,15 +14,17 @@
             <div class="panel panel-success">
                 <div class="panel-heading">Your Sets</div>
                 <div class="panel-body">
-                    <a href="/user/{{username}}/create" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Set</a>
+                    <a href="/user/{{user.username}}/create" class="btn btn-success">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Set
+                    </a>
                 </div>
 
                 <ul class="list-group">
-                    {% for cardSet in cardSets %}
+                    {% for cardSet in myCardSets %}
                         <a href="#" class="list-group-item">
-                            <h4 class="list-group-item-heading">cardSet.title</h4>
-                            <p class="list-group-item-text">cardSet.description</p>
-                            <p class="list-group-item-text">Language: ---</p>
+                            <h4 class="list-group-item-heading">{{cardSet.title}}</h4>
+                            <p class="list-group-item-text">{{cardSet.description}}</p>
+                            <p class="list-group-item-text">Language: {{languages[cardSet.language-1].name}}</p>
                         </a>
                     {% endfor %}
                 </ul>
@@ -35,18 +37,14 @@
                 <div class="panel-body">
                     Here's the rest
                 </div>
-
                 <ul class="list-group">
-                    <a href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading">My first set</h4>
-                        <p class="list-group-item-text">This is my first set.</p>
-                        <p class="list-group-item-text">Language: English</p>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading">Vandertramp verbs</h4>
-                        <p class="list-group-item-text">Learning french verbs that needs special conjugations.</p>
-                        <p class="list-group-item-text">Language: French</p>
-                    </a>
+                    {% for cardSet in allCardSets %}
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading">{{cardSet.title}}</h4>
+                            <p class="list-group-item-text">{{cardSet.description}}</p>
+                            <p class="list-group-item-text">Language: {{languages[cardSet.language-1].name}}</p>
+                        </a>
+                    {% endfor %}
                 </ul>
 
             </div>

@@ -57,16 +57,18 @@ INSERT INTO Language(name) VALUES
 
 INSERT INTO Category(name) VALUES
   ('Uncategorized'),
-  ( 'Common Words'),
-  ( 'Travel'),
-  ( 'Business'),
-  ( 'School'),
-  ( 'Numbers'),
-  ( 'Slang');
+  ('Common Words'),
+  ('Travel'),
+  ('Business'),
+  ('School'),
+  ('Numbers'),
+  ('Slang');
 
 INSERT INTO CardSet(title, description, language, creator, lastUpdate, category) VALUES
     ('Food', 'Korean food terms', 8, 'sumin', CURRENT_TIMESTAMP, 1),
-    ('Greetings', 'Simple greetings in Malay', 5, 'tim', CURRENT_TIMESTAMP, 3);
+    ('Greetings', 'Simple greetings in Malay', 5, 'tim', CURRENT_TIMESTAMP, 3),
+    ('Greetings', 'Spanish greetings', 3, 'sumin', CURRENT_TIMESTAMP, 3),
+    ('Greetings', 'Chinese greetings', 4, 'tim', CURRENT_TIMESTAMP, 4);
 
 INSERT INTO Flashcard(word, translation, setID) VALUES
     ('ddukbokki', 'spicy rice cake', 1),
@@ -76,8 +78,20 @@ INSERT INTO Flashcard(word, translation, setID) VALUES
     ('bulgogi', 'marinated beef', 1),
     ('Hai', 'Hello', 2),
     ('Selamat datang', 'Welcome', 2),
-    ('Goodbye (when you are leaving)', 'Selamat tinggal', 2),
-    ('Goodbye (when someone else is leaving', 'Selamat jalan', 2),
-    ('Good morning', 'Selamat pagi', 2),
-    ('Good afternoon', 'Selamat petang', 2),
-    ('Good evening', 'Selamat malam', 2);
+    ('Selamat tinggal', 'Goodbye - when you are leaving', 2),
+    ('Selamat jalan', 'Goodbye - when someone else is leaving', 2),
+    ('Selamat pagi', 'Good morning', 2),
+    ('Selamat petang', 'Good afternoon', 2),
+    ('Selamat malam', 'Good evening', 2),
+    ('Hola', 'Hello', 3),
+    ('Bienvenidos', 'Welcome', 3),
+    ('Adios', 'Goodbye', 3),
+    ('Chao', 'Goodbye', 3),
+    ('Buenos dias', 'Good morning', 3),
+    ('Buenas tardes', 'Good afternoon', 3),
+    ('Buenas noches', 'Good evening', 3),
+    ('你好', 'Hello', 4),
+    ('再见', 'Goodbye', 4),
+    ('早上好', 'Good morning', 4),
+    ('下午好', 'Good afternoon', 4),
+    ('晚上好', 'Good evening', 4);

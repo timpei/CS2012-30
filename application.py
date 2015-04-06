@@ -71,7 +71,7 @@ def submitLogin():
 
     # if user doesn't exist or password is incorrect
     # TODO(sumin): Decode password
-    if user is None or user[5] != password:
+    if user is None or user["password"] != password:
         return render_template('login.html', failed=True)
 
     return redirect(url_for('userDashboard', username=username))
@@ -87,7 +87,7 @@ def submitSignup():
     birthday=request.form['birthday']
     avatar=request.form['inlineRadio']
 
-    # TODO(sumin): Encode password
+    # TODO(sumin): Encode password, check date, catch error
     # add the user into the database if it doesn't exist
     get_db().execute('INSERT INTO User '
                      '(username, firstName, lastName, email, birthday, password,'
@@ -111,7 +111,15 @@ def userDashboard(username):
         bannerMessage = 'Success! Your set has been created.'
     else:
         bannerMessage = None
-    return render_template('user.html', username=username, message=bannerMessage)
+
+    languages = query_db('SELECT * FROM Language')
+    user = query_db('SELECT * FROM User WHERE username = ?',
+                    [username], one=True)
+    myCardSets = [cardSet for cardSet in query_db('SELECT * FROM CardSet WHERE creator = ?', [username])]
+    allCardSets = [cardSet for cardSet in query_db('SELECT * FROM CardSet WHERE creator <> ? LIMIT 5', [username])]
+
+    return render_template('user.html', languages=languages, user=user, myCardSets=myCardSets,
+                           allCardSets=allCardSets, message=bannerMessage)
 
 @app.route('/user/<username>/create')
 def createSet(username):
