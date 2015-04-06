@@ -3,10 +3,10 @@ import sqlite3
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, g
 
-import consts
-
 # this is the path of the sqlite3 db file
 DATABASE = 'tmp/flashcard.db'
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # this is an attribute that will be used by flask
 # setting DEBUG to true will allow you to trace server activities from terminal
@@ -28,6 +28,7 @@ def get_db():
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = connect_to_database()
+    db.row_factory = sqlite3.Row
     return db
 
 # opens a sqlite3 connection
@@ -102,20 +103,41 @@ def submitSignup():
 
     return render_template('login.html', signUp=True, success=success)
 
+# TODO(tim): add html manner if status=create_success
 @app.route('/user/<username>')
 def userDashboard(username):
-    return render_template('user.html', user=username)
+    return render_template('user.html', username=username)
 
 @app.route('/user/<username>/create')
-def createUser(username):
+def createSet(username):
     user = query_db('SELECT * FROM User WHERE username = ?', 
                     [username], one=True)
-
+    languages = query_db('SELECT name FROM Language ORDER BY langID')
+    categories = query_db('SELECT name FROM Category ORDER BY catID')
+    
     return render_template('create.html', user=user, 
-                                        languages=consts.LANGUAGES,
-                                        categories=consts.CATEGORIES)
+                                        languages=languages,
+                                        categories=categories)
 
-
+@app.route('/create_set/<username>', methods=['POST'])
+def submitSetCreate(username):
+    data = request.get_json()
+    print data
+    cursor = get_db().cursor()
+    cursor.execute('INSERT INTO CardSet '
+                     '(title, description, language, creator, lastUpdate, category) VALUES '
+                     '(?, ?, ?, ?, ?, ?)',
+                      [data['title'], data['description'], data['language'], data['author'],
+                      datetime.now(), data['category']])
+    setId = cursor.lastrowid
+    
+    for card in data['flashcards']:
+        cursor.execute('INSERT INTO Flashcard'
+                        '(word, translation, setID) VALUES'
+                        '(?, ?, ?)',
+                        [card['word'], card['translation'], setId])
+    get_db().commit()
+    return 'True'
 
 # starts the server 
 if __name__ == '__main__':
