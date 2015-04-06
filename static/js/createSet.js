@@ -44,7 +44,7 @@ angular.module('createSetApp', [])
                 headers: { 'Content-Type': 'application/json' },
                 data: JSON.stringify($scope.set)
             }).success(function(data) {
-                window.location.replace('/user/' + $scope.set.author + '?status=create_success');
+                window.location.replace('/user/' + $scope.set.author + '?banner=create_success');
             });
         }
 

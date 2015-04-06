@@ -103,10 +103,15 @@ def submitSignup():
 
     return render_template('login.html', signUp=True, success=success)
 
-# TODO(tim): add html manner if status=create_success
+# TODO(tim): add html manner if banner=create_success
 @app.route('/user/<username>')
 def userDashboard(username):
-    return render_template('user.html', username=username)
+    banner = request.args.get('banner')
+    if banner == 'create_success':
+        bannerMessage = 'Success! Your set has been created.'
+    else:
+        bannerMessage = None
+    return render_template('user.html', username=username, message=bannerMessage)
 
 @app.route('/user/<username>/create')
 def createSet(username):

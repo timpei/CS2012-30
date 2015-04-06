@@ -5,6 +5,10 @@
 {% block body %}
     <link rel="stylesheet" href="/static/user.css">
 
+    {% if message != None %}
+    <div class="alert alert-success" role="alert">{{message}}</div>
+    {% endif %}
+
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-success">

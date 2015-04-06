@@ -15,7 +15,7 @@
         <h1>New Set</h1>
         <hr />
         
-        <form class="form-horizontal" action="/create_set/{{user.username}}" method="post" ng-controller="formController">
+        <form class="form-horizontal" action="/create_set/{{user.username}}" ng-controller="formController">
             <h1>{[{test}]}</h1>
             <div class="form-group">
                 <label class="col-md-2 control-label">Set Name</label>
@@ -80,7 +80,7 @@
                         </a>
                     </td>
                 </tr>
-                <tr id="set-actions">
+                <tr>
                     <td colspan="4">
                         <a class="cardcontrol btn btn-success" ng-click="addCard()">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Card
