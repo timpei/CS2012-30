@@ -35,7 +35,7 @@ angular.module('createSetApp', [])
             for (var i = 0; i < $scope.set.flashcards.length; i++) {
                 if ($scope.set.flashcards[i].word == '' && 
                     $scope.set.flashcards[i].translation == '') {
-                    removeCard(i);
+                    $scope.removeCard(i);
                 }
             }
             $http({
