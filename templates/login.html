@@ -1,12 +1,9 @@
 {% extends "base.html" %}
+
+{% block header %}flashcards{% endblock %}
+
 {% block body %}
-
-<link rel="stylesheet" href="/static/css/homepage.css">
-
-<div class="container">
-    <div class="header clearfix">
-        <h3 class="text-muted">flashcards</h3>
-    </div>
+    <link rel="stylesheet" href="/static/css/homepage.css">
 
     {% if failed %}
     <div class="alert alert-danger" role="alert">
@@ -78,11 +75,4 @@
             </form>
         </div>
     </div>
-
-    <footer class="footer">
-        <hr/>
-        <p>© flashcards</p>
-    </footer>
-
-</div>
 {% endblock %}

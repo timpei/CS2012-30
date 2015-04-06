@@ -38,12 +38,46 @@ CREATE TABLE Flashcard(
 	cardID INTEGER PRIMARY KEY AUTOINCREMENT
 );
 
-INSERT INTO User(username, firstName, lastName, email, birthday, password, isAdmin, avatar, lastLogin, registerDate)
-VALUES('admin', 'John', 'Smith', 'john@u.nus.edu', 01-01-1990, 'adm1n', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO User(username, firstName, lastName, email, birthday,
+    password, isAdmin, avatar, lastLogin, registerDate) VALUES
+    ('admin', 'John', 'Smith', 'john@u.nus.edu', 01-01-1990, 'adm1n', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('sumin', 'Sumin', 'Kang', 'sumin@u.nus.edu', 21-05-1993, 'kang', 0, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('tim', 'Tim', 'Pei', 'tim@u.nus.edu', 29-04-1993, 'pei', 0, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+INSERT INTO Language(name) VALUES
+  ('English'),
+  ('French'),
+  ('Spanish'),
+  ('Chinsese'),
+  ('Malay'),
+  ('Thai'),
+  ('Japanese'),
+  ('Korean'),
+  ('Italian');
 
-INSERT INTO User(username, firstName, lastName, email, birthday, password, isAdmin, avatar, lastLogin, registerDate)
-VALUES('sumin', 'Sumin', 'Kang', 'sumin@u.nus.edu', 21-05-1993, 'kang', 0, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO Category(name) VALUES
+  ('Uncategorized'),
+  ( 'Common Words'),
+  ( 'Travel'),
+  ( 'Business'),
+  ( 'School'),
+  ( 'Numbers'),
+  ( 'Slang');
 
-INSERT INTO User(username, firstName, lastName, email, birthday, password, isAdmin, avatar, lastLogin, registerDate)
-VALUES('tim', 'Tim', 'Pei', 'tim@u.nus.edu', 29-04-1993, 'pei', 0, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO CardSet(title, description, language, creator, lastUpdate, category) VALUES
+    ('Food', 'Korean food terms', 8, 'sumin', CURRENT_TIMESTAMP, 1),
+    ('Greetings', 'Simple greetings in Malay', 5, 'tim', CURRENT_TIMESTAMP, 3);
+
+INSERT INTO Flashcard(word, translation, setID) VALUES
+    ('ddukbokki', 'spicy rice cake', 1),
+    ('pajeon', 'seafood pancake', 1),
+    ('naengmyeon', 'spicy rice cake', 1),
+    ('galbitang', 'pork bone soup', 1),
+    ('bulgogi', 'marinated beef', 1),
+    ('Hai', 'Hello', 2),
+    ('Selamat datang', 'Welcome', 2),
+    ('Goodbye (when you are leaving)', 'Selamat tinggal', 2),
+    ('Goodbye (when someone else is leaving', 'Selamat jalan', 2),
+    ('Good morning', 'Selamat pagi', 2),
+    ('Good afternoon', 'Selamat petang', 2),
+    ('Good evening', 'Selamat malam', 2);
