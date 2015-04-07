@@ -38,6 +38,12 @@ CREATE TABLE Flashcard(
 	cardID INTEGER PRIMARY KEY AUTOINCREMENT
 );
 
+CREATE TABLE UserCollection (
+    username VARCHAR(50) REFERENCES User(username),
+    setID INTEGER REFERENCES CardSet(setID),
+    PRIMARY KEY(username, setID)
+);
+
 INSERT INTO User(username, firstName, lastName, email, birthday,
     password, isAdmin, avatar, lastLogin, registerDate) VALUES
     ('admin', 'John', 'Smith', 'john@u.nus.edu', 01-01-1990, 'adm1n', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -45,24 +51,24 @@ INSERT INTO User(username, firstName, lastName, email, birthday,
     ('tim', 'Tim', 'Pei', 'tim@u.nus.edu', 29-04-1993, 'pei', 0, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 INSERT INTO Language(name) VALUES
-  ('English'),
-  ('French'),
-  ('Spanish'),
-  ('Chinsese'),
-  ('Malay'),
-  ('Thai'),
-  ('Japanese'),
-  ('Korean'),
-  ('Italian');
+    ('English'),
+    ('French'),
+    ('Spanish'),
+    ('Chinsese'),
+    ('Malay'),
+    ('Thai'),
+    ('Japanese'),
+    ('Korean'),
+    ('Italian');
 
 INSERT INTO Category(name) VALUES
-  ('Uncategorized'),
-  ('Common Words'),
-  ('Travel'),
-  ('Business'),
-  ('School'),
-  ('Numbers'),
-  ('Slang');
+    ('Uncategorized'),
+    ('Common Words'),
+    ('Travel'),
+    ('Business'),
+    ('School'),
+    ('Numbers'),
+    ('Slang');
 
 INSERT INTO CardSet(title, description, language, creator, lastUpdate, category) VALUES
     ('Food', 'Korean food terms', 8, 'sumin', CURRENT_TIMESTAMP, 1),
@@ -95,3 +101,9 @@ INSERT INTO Flashcard(word, translation, setID) VALUES
     ('早上好', 'Good morning', 4),
     ('下午好', 'Good afternoon', 4),
     ('晚上好', 'Good evening', 4);
+
+INSERT INTO UserCollection VALUES
+    ('sumin', 1),
+    ('sumin', 3),
+    ('tim', 2),
+    ('tim', 4);

@@ -118,7 +118,10 @@ def userDashboard(username):
     languages = query_db('SELECT * FROM Language')
     user = query_db('SELECT * FROM User WHERE username = ?',
                     [username], one=True)
-    myCardSets = [cardSet for cardSet in query_db('SELECT * FROM CardSet WHERE creator = ?', [username])]
+    myCardSets = [cardSet for cardSet in query_db("""SELECT * FROM CardSet c, UserCollection u
+                                                     WHERE u.username = ?
+                                                     AND c.setID = u.setID""",
+                                                  [username])]
     allCardSets = [cardSet for cardSet in query_db('SELECT * FROM CardSet WHERE creator <> ? LIMIT 5', [username])]
 
     return render_template('user.html', languages=languages, user=user, myCardSets=myCardSets,

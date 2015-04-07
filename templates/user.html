@@ -33,7 +33,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Communty Sets</div>
                 <div class="panel-body">
-                    Here's the rest
+                    <a href="/user/{{user.username}}/search" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+                    </a>
                 </div>
                 <ul class="list-group">
                     {% for cardSet in allCardSets %}
