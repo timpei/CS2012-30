@@ -29,13 +29,14 @@
             <img alt="Brand" id="logo" src="/static/img/logo.gif">
                 Flashcards
             </a>
-            {% if user %}
-            <ul class="nav navbar-nav">
-                <li><a href="/user/{{user.username}}/search">Search</a></li>
-                <li><a href="/user/{{user.username}}/explore">Explore</a></li>
-            </ul>
-            {% endif %}
         </div>
+
+        {% if user %}
+        <ul class="nav navbar-nav">
+            <li><a href="/user/{{user.username}}/search">Search</a></li>
+            <li><a href="/user/{{user.username}}/explore">Explore</a></li>
+        </ul>
+        {% endif %}
 
         {% if user %}
             <p class="navbar-text navbar-right" id="login-nav">Signed in as {{user.username}}</p>

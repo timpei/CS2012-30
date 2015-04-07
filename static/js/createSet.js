@@ -9,6 +9,7 @@ angular.module('createSetApp', [])
         });
     })
     .controller('formController', function($scope, $http, $location) {
+        var username = $location.path().match('user\/(.*)\/edit')[1]
 
         $scope.removeCard = function(n) {
             $scope.set.flashcards.splice(n, 1);
@@ -47,12 +48,12 @@ angular.module('createSetApp', [])
                 }
             }
             $http({
-                url: '/edit_set/' + $scope.set.creator,
+                url: '/edit_set/' + $scope.set.setID,
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 data: JSON.stringify($scope.set)
             }).success(function(data) {
-                window.location.replace('/user/' + $scope.set.creator + '?banner=edit_success');
+                window.location.replace('/user/' + username + '?banner=edit_success');
             });
         }
 

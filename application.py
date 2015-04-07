@@ -110,10 +110,14 @@ def submitSignup():
 @app.route('/user/<username>')
 def userDashboard(username):
     banner = request.args.get('banner')
+    type = 'success'
     if banner == 'create_success':
         bannerMessage = 'Success! Your set has been created.'
     elif banner == 'edit_success':
         bannerMessage = 'Success! The set has be updated.'
+    elif banner == 'not_admin':
+        bannerMessage = 'Sorry, you do not have edit privileges.'
+        type = 'danger'
     else:
         bannerMessage = None
 
@@ -127,7 +131,7 @@ def userDashboard(username):
     allCardSets = [cardSet for cardSet in query_db('SELECT * FROM CardSet WHERE creator <> ? LIMIT 5', [username])]
 
     return render_template('user.html', languages=languages, user=user, myCardSets=myCardSets,
-                           allCardSets=allCardSets, message=bannerMessage)
+                           allCardSets=allCardSets, message=bannerMessage, type=type)
 
 # TODO(tim): Change add card button ui (put it on top of the delete button)
 @app.route('/user/<username>/create')
@@ -138,6 +142,9 @@ def createSet(username, setID=None):
     languages = query_db('SELECT name FROM Language ORDER BY langID')
     categories = query_db('SELECT name FROM Category ORDER BY catID')
     mode = 'edit' if setID else 'create'
+
+    if mode == 'edit' and user['isAdmin'] == 0:
+        return redirect(url_for('userDashboard', username=username, banner='not_admin'))
 
     return render_template('create.html', user=user, 
                                         languages=languages,
@@ -172,6 +179,46 @@ def submitSetCreate(username):
                         [card['word'], card['translation'], setId])
     get_db().commit()
     return 'True'
+
+@app.route('/edit_set/<setID>', methods=['POST'])
+def submitSetEdit(setID):
+    data = request.get_json()
+    cursor = get_db().cursor()
+
+    if 'description' in data:
+        cursor.execute("""UPDATE CardSet
+                          SET title = ?, description = ?, language = ?, lastUpdate = ?, category = ?
+                          WHERE setID = ?""",
+                          [data['title'], data['description'], data['language'],
+                          datetime.now(), data['category'], setID])
+    else:
+        cursor.execute("""UPDATE CardSet
+                          SET title = ?, language = ?, lastUpdate = ?, category = ?
+                          WHERE setID = ?""",
+                          [data['title'], data['language'], datetime.now(), data['category'], setID])
+
+    # first delete all the flashcards in the set
+    cursor.execute("DELETE FROM Flashcard WHERE setID = ?", [setID])
+
+    # add all the new flashcards
+    for card in data['flashcards']:
+        cursor.execute('INSERT INTO Flashcard'
+                        '(word, translation, setID) VALUES'
+                        '(?, ?, ?)',
+                        [card['word'], card['translation'], setID])
+    get_db().commit()
+    return 'True'
+
+@app.route('/user/<username>/delete/<setID>', methods=['GET'])
+def submitSetDelete(username, setID):
+    cursor = get_db().cursor()
+
+    cursor.execute("DELETE FROM Flashcard WHERE setID = ?", [setID])
+    cursor.execute("DELETE FROM CardSet WHERE setID = ?", [setID])
+    cursor.execute("DELETE FROM UserCollection WHERE setID = ?", [setID])
+
+    get_db().commit()
+    return redirect(url_for('userDashboard', username=username))
 
 @app.route('/user/<username>/search')
 def searchSet(username):
