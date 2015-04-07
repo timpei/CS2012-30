@@ -1,13 +1,9 @@
 angular.module('searchSetApp', [])
     .config(function($interpolateProvider, $locationProvider){
         $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
-        $locationProvider.html5Mode({
-            enabled: true,
-            requireBase: false
-        });
     })
     .controller('mainController', function($scope, $http, $location) {
-        $scope.username = $location.path().match('user\/(.*)\/')[1],
+        $scope.username = window.location.pathname.match('user\/(.*)\/')[1],
 		$scope.tab = 'quick';
 		$scope.intro = true;
 
