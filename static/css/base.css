@@ -1,17 +1,32 @@
-.container {
+
+body{
+	margin-top:50px;
+}
+
+#logo {
+	height: 30px;
+}
+
+#main-container {
 	max-width: 800px;
+}
+
+#login-nav {
+	margin-right: 50px;
+}
+
+.container {
+	max-width: 100%;
+}
+
+.navbar-brand > img {
+	display: inline;
+}
+
+.navbar-brand {
+	padding: 10px 20px;
 }
 
 .header {
 	margin-bottom: 20px;
-}
-
-a {
-  color: inherit;
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: inherit;
-  text-decoration: inherit;
 }

@@ -1,7 +1,7 @@
 <!doctype html>
 
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
 
     <title>flashcards</title>
@@ -10,23 +10,40 @@
     <link rel="stylesheet" href="/static/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/base.css">
 
-    <!--[if lt IE 9]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
 
-  </head>
+</head>
 
-  <div class="container">
+<div class="container" id="main-container">
 
-  <div class="header clearfix" id="navbar">
-      <h3 class="text-muted">{% block header %}{% endblock %}</h3>
-  </div>
-  {% block body %}{% endblock %}
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">
+            <img alt="Brand" id="logo" src="/static/img/logo.gif">
+                Flashcards
+            </a>
+            {% if user %}
+            <ul class="nav navbar-nav">
+                <li><a href="/user/{{user.username}}/search">Search</a></li>
+                <li><a href="/user/{{user.username}}/explore">Explore</a></li>
+            </ul>
+            {% endif %}
+        </div>
+
+        {% if user %}
+            <p class="navbar-text navbar-right" id="login-nav">Signed in as {{user.username}}</p>
+        {% endif %}
+    </div>
+</nav>  
+    {% block body %}{% endblock %}
 
     <footer class="footer">
-      <hr />
-      <p>© flashcards</p>
+        <hr />
+        <p>© flashcards</p>
     </footer>
-  </div>
+</div>
 </html>
 
