@@ -13,6 +13,7 @@ angular.module('createSetApp', [])
         $scope.set = {
             language: 1,
             category: 1,
+            description: '',
             author: $location.path().match('user\/(.*)\/')[1],
         };
 

@@ -54,7 +54,7 @@ INSERT INTO Language(name) VALUES
     ('English'),
     ('French'),
     ('Spanish'),
-    ('Chinsese'),
+    ('Chinese'),
     ('Malay'),
     ('Thai'),
     ('Japanese'),

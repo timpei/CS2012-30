@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block header %}flashcard{% endblock %}
+{% block header %}flashcards{% endblock %}
 
 {% block body %}
 <hr/>
@@ -11,14 +11,24 @@
     <script>
         $(document).ready(function() {
             $(".flip").click(function(){
-              $(this).find(".card").toggleClass("flipped");
-              return false;
+                $(this).find(".card").toggleClass("flipped");
+                return false;
+            });
+
+            $('#star').click( function(){
+                $(this).find('span').toggleClass('glyphicon-star-empty').toggleClass('glyphicon-star');
             });
         });
     </script>
 
 
-  <h1>{{cardSet.title}} <small>by {{cardSet.creator}}</small></h1>
+<h1>
+    {{cardSet.title}}
+    <small>by {{cardSet.creator}}</small>
+    <small>
+        <a id="star"><span class="glyphicon glyphicon-star-empty"></span></a>
+    </small>
+</h1>
 
 
 <div class="container" ng-app="browseCardApp" ng-controller="cardController">

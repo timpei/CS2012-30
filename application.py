@@ -152,7 +152,7 @@ def submitSetCreate(username):
     else:
         cursor.execute('INSERT INTO CardSet '
                          '(title, language, creator, lastUpdate, category) VALUES '
-                         '(?, ?, ?, ?, ?, ?)',
+                         '(?, ?, ?, ?, ?)',
                           [data['title'], data['language'], data['author'],
                           datetime.now(), data['category']])
     setId = cursor.lastrowid
