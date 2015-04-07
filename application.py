@@ -112,6 +112,8 @@ def userDashboard(username):
     banner = request.args.get('banner')
     if banner == 'create_success':
         bannerMessage = 'Success! Your set has been created.'
+    elif banner == 'edit_success':
+        bannerMessage = 'Success! The set has be updated.'
     else:
         bannerMessage = None
 
@@ -129,15 +131,18 @@ def userDashboard(username):
 
 # TODO(tim): Change add card button ui (put it on top of the delete button)
 @app.route('/user/<username>/create')
-def createSet(username):
+@app.route('/user/<username>/edit/<setID>')
+def createSet(username, setID=None):
     user = query_db('SELECT * FROM User WHERE username = ?', 
                     [username], one=True)
     languages = query_db('SELECT name FROM Language ORDER BY langID')
     categories = query_db('SELECT name FROM Category ORDER BY catID')
-    
+    mode = 'edit' if setID else 'create'
+
     return render_template('create.html', user=user, 
                                         languages=languages,
-                                        categories=categories)
+                                        categories=categories,
+                                        mode=mode)
 
 @app.route('/create_set/<username>', methods=['POST'])
 def submitSetCreate(username):
@@ -147,13 +152,13 @@ def submitSetCreate(username):
         cursor.execute('INSERT INTO CardSet '
                          '(title, description, language, creator, lastUpdate, category) VALUES '
                          '(?, ?, ?, ?, ?, ?)',
-                          [data['title'], data['description'], data['language'], data['author'],
+                          [data['title'], data['description'], data['language'], data['creator'],
                           datetime.now(), data['category']])
     else:
         cursor.execute('INSERT INTO CardSet '
                          '(title, language, creator, lastUpdate, category) VALUES '
                          '(?, ?, ?, ?, ?)',
-                          [data['title'], data['language'], data['author'],
+                          [data['title'], data['language'], data['creator'],
                           datetime.now(), data['category']])
     setId = cursor.lastrowid
 
@@ -228,6 +233,11 @@ def getFlashcards(setID):
     print flashcards
     return jsonify(flashcards=flashcards)
 
+@app.route('/set/<setID>', methods=['GET'])
+def getSet(setID):
+    cardSet = query_db("SELECT * FROM CardSet WHERE setID = ?", 
+                        [setID], one=True)
+    return jsonify(result=cardSet)
 
 @app.route('/user/<username>/view/<setID>')
 def viewSet(username, setID):

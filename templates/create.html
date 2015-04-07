@@ -10,7 +10,11 @@
     <script type="text/javascript" src="/static/lib/angular.min.js"></script>
     <script type="text/javascript" src="/static/js/createSet.js"></script>
 
+        {% if mode == "create" %}
         <h1>New Set</h1>
+        {% else %}
+        <h1>Edit Set</h1>
+        {% endif %}
         <hr />
 
         <form class="form-horizontal" action="/create_set/{{user.username}}"
@@ -24,7 +28,7 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">Author</label>
                 <div class="col-md-10">
-                    <input type="text" ng-model="set.author" class="form-control" disabled>
+                    <input type="text" ng-model="set.creator" class="form-control" disabled>
                 </div>
             </div>
             <div class="form-group">
@@ -86,6 +90,10 @@
                     </td>
                 </tr>
             </table>
+            {% if mode == "create" %}
             <a class="btn btn-bg btn-primary" ng-click="submitCreate()">Create Set</a>
+            {% else %}
+            <a class="btn btn-bg btn-primary" ng-click="submitEdit()">Edit Set</a>
+            {% endif %}
         </form>
 {% endblock %}
