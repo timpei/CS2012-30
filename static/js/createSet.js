@@ -9,7 +9,7 @@ angular.module('createSetApp', [])
         });
     })
     .controller('formController', function($scope, $http, $location) {
-        var username = $location.path().match('user\/(.*)\/edit')[1]
+        var username = $location.path().match('user\/(.*)\/')[1]
 
         $scope.removeCard = function(n) {
             $scope.set.flashcards.splice(n, 1);

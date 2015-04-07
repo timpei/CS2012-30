@@ -25,7 +25,7 @@ angular.module('searchSetApp', [])
 			$scope.query = {
 				title: '',
 				description: '',
-				author: '',
+				creator: '',
 				language: 0,
 				category: 0,
 			}

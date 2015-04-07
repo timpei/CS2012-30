@@ -170,7 +170,7 @@ def submitSetCreate(username):
     setId = cursor.lastrowid
 
     cursor.execute('INSERT INTO UserCollection  VALUES (?, ?)',
-                    [data['author'], setId])
+                    [data['creator'], setId])
     
     for card in data['flashcards']:
         cursor.execute('INSERT INTO Flashcard'
@@ -244,7 +244,7 @@ def advancedSearch(username):
             AND s.creator LIKE '%' || ? || '%' \
             AND l.langID = s.language \
             AND c.catID = s.category"
-    queryData = [data['title'], data['description'], data['author']]
+    queryData = [data['title'], data['description'], data['creator']]
 
 
     if int(data['language']) != 0:
