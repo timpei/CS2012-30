@@ -71,11 +71,11 @@ INSERT INTO CardSet(title, description, language, creator, lastUpdate, category)
     ('Greetings', 'Chinese greetings', 4, 'tim', CURRENT_TIMESTAMP, 4);
 
 INSERT INTO Flashcard(word, translation, setID) VALUES
-    ('ddukbokki', 'spicy rice cake', 1),
-    ('pajeon', 'seafood pancake', 1),
-    ('naengmyeon', 'spicy rice cake', 1),
-    ('galbitang', 'pork bone soup', 1),
-    ('bulgogi', 'marinated beef', 1),
+    ('떡볶이', 'spicy rice cake', 1),
+    ('파전', 'seafood pancake', 1),
+    ('냉면', 'spicy rice cake', 1),
+    ('갈비탕', 'pork bone soup', 1),
+    ('불고기', 'marinated beef', 1),
     ('Hai', 'Hello', 2),
     ('Selamat datang', 'Welcome', 2),
     ('Selamat tinggal', 'Goodbye - when you are leaving', 2),
