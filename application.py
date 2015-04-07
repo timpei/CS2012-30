@@ -1,7 +1,7 @@
 import os
 import sqlite3
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for, g
+from flask import Flask, render_template, request, redirect, url_for, g, jsonify
 
 # this is the path of the sqlite3 db file
 DATABASE = 'tmp/flashcard.db'
@@ -13,6 +13,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
+
+def make_dicts(cursor, row):
+    return dict((cursor.description[idx][0], value)
+                for idx, value in enumerate(row))
 
 # used to run SQL queries
 # setting one to true will only return the first (or only) result
@@ -28,7 +32,7 @@ def get_db():
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = connect_to_database()
-    db.row_factory = sqlite3.Row
+    db.row_factory = make_dicts
     return db
 
 # opens a sqlite3 connection
@@ -135,7 +139,6 @@ def createSet(username):
 @app.route('/create_set/<username>', methods=['POST'])
 def submitSetCreate(username):
     data = request.get_json()
-    print data
     cursor = get_db().cursor()
     cursor.execute('INSERT INTO CardSet '
                      '(title, description, language, creator, lastUpdate, category) VALUES '
@@ -151,6 +154,37 @@ def submitSetCreate(username):
                         [card['word'], card['translation'], setId])
     get_db().commit()
     return 'True'
+
+@app.route('/user/<username>/search')
+def searchSet(username):
+    user = query_db('SELECT * FROM User WHERE username = ?', 
+                    [username], one=True)
+    languages = query_db('SELECT name FROM Language ORDER BY langID')
+    categories = query_db('SELECT name FROM Category ORDER BY catID')
+
+    return render_template('search.html', user=user, 
+                                        languages=languages,
+                                        categories=categories)
+
+
+@app.route('/advancedSearch/<username>', methods=['POST'])
+def advancedSearch(username):
+
+    return jsonify(data=request.get_json())
+
+
+@app.route('/quickSearch/<username>', methods=['POST'])
+def quickSearch(username):
+    data = request.get_json()
+    results = query_db("SELECT s.setID, s.title, s.description, l.name AS language, \
+                                c.name AS category, s.creator, s.lastUpdate \
+                        FROM CardSet s, Language l, Category c \
+                        WHERE title LIKE '%' || ? || '%' \
+                        AND l.langID = s.language \
+                        AND c.catID = s.category", 
+                        [data['query']])
+    print results
+    return jsonify(results=results)
 
 # starts the server 
 if __name__ == '__main__':
