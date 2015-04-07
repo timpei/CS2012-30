@@ -251,7 +251,7 @@ def exploreSets(username):
     return render_template('explore.html', user=user, 
                                         languages=languages,
                                         categories=categories,
-                                        title="All Sets",
+                                        title="Browsing all sets",
                                         sets=allCardSets)
 
 @app.route('/user/<username>/explore/<group>/<index>')
@@ -270,7 +270,7 @@ def exploreGroups(username, group, index):
     return render_template('explore.html', user=user, 
                                         languages=languages,
                                         categories=categories,
-                                        title='Brwosing "%s"' % name,
+                                        title='Browsing "%s"' % name,
                                         sets=allCardSets)
 
 # starts the server 
