@@ -277,10 +277,18 @@ def viewSet(username, setID):
 @app.route('/user/<username>/explore')
 def exploreSets(username):
     user = query_db('SELECT * FROM User WHERE username = ?', [username], one=True)
-    languages = query_db('SELECT name FROM Language ORDER BY langID')
-    categories = query_db('SELECT name FROM Category ORDER BY catID')
+    languages = query_db("""SELECT l.name, ls.langCount 
+                            FROM Language l
+                            LEFT JOIN  LanguageSetCount ls
+                            ON l.langID = ls.langID
+                            ORDER BY l.langID""")
+    categories = query_db("""SELECT c.name, cs.catCount 
+                            FROM Category c
+                            LEFT JOIN CategorySetCount cs
+                            ON c.catID = cs.catID
+                            ORDER BY c.catID""")
     allCardSets = [cardSet for cardSet in query_db('SELECT * FROM CardSet')]
-
+    print categories
     return render_template('explore.html', user=user, 
                                         languages=languages,
                                         categories=categories,
@@ -290,12 +298,33 @@ def exploreSets(username):
 @app.route('/user/<username>/explore/<group>/<index>')
 def exploreGroups(username, group, index):
     user = query_db('SELECT * FROM User WHERE username = ?', [username], one=True)
-    languages = query_db('SELECT name FROM Language ORDER BY langID')
-    categories = query_db('SELECT name FROM Category ORDER BY catID')
+    languages = query_db("""SELECT l.name, ls.langCount 
+                            FROM Language l
+                            LEFT JOIN  LanguageSetCount ls
+                            ON l.langID = ls.langID
+                            ORDER BY l.langID""")
+    categories = query_db("""SELECT c.name, cs.catCount 
+                            FROM Category c
+                            LEFT JOIN CategorySetCount cs
+                            ON c.catID = cs.catID
+                            ORDER BY c.catID""")
 
     if group == 'category':
-        allCardSets = [cardSet for cardSet in query_db('SELECT * FROM CardSet WHERE category == ?', [int(index)])]
+        allCardSets = query_db('SELECT * FROM CardSet WHERE category == ?', [int(index)])
         name = categories[int(index)-1]['name']
+    elif group == 'featured':
+        if index == 'popular':
+            allCardSets = query_db("""SELECT c.setID, c.title, c.description, m.numCollections
+                                    FROM MostCollected m, CardSet c 
+                                    WHERE m.setID = c.setID
+                                    ORDER BY m.numCollections""")
+            name = 'most collected sets'
+        if index == 'biggest':
+            allCardSets = query_db("""SELECT c.setID, c.title, c.description, b.numCards
+                                    FROM BiggestSet b, CardSet c 
+                                    WHERE b.setID = c.setID
+                                    ORDER BY b.numCards""")
+            name = 'biggest sets'
     else:
         allCardSets = [cardSet for cardSet in query_db('SELECT * FROM CardSet WHERE language == ?', [int(index)])]
         name = languages[int(index)-1]['name']

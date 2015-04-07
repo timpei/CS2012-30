@@ -44,6 +44,34 @@ CREATE TABLE UserCollection (
     PRIMARY KEY(username, setID)
 );
 
+CREATE VIEW MostCollected AS
+SELECT c.setID AS setID, COUNT(u.username) AS numCollections
+FROM CardSet c, UserCollection u
+WHERE c.setID = u.setID
+GROUP BY c.setID
+ORDER BY COUNT(u.username) DESC
+LIMIT 20;
+
+CREATE VIEW BiggestSet AS
+SELECT c.setID AS setID, COUNT(f.cardID) AS numCards
+FROM CardSet c, Flashcard f
+WHERE c.setID = f.setID
+GROUP BY f.setID
+ORDER BY COUNT(f.cardID) DESC
+LIMIT 20;
+
+CREATE VIEW CategorySetCount AS
+SELECT ca.catID AS catID, COUNT(cs.setID) AS catCount
+FROM Category ca, CardSet cs
+WHERE ca.catID = cs.category
+GROUP BY ca.catID;
+
+CREATE VIEW LanguageSetCount AS
+SELECT l.langID AS langID, COUNT(c.setID) AS langCount
+FROM Language l, CardSet c
+WHERE l.langID = c.language
+GROUP BY l.langID;
+
 INSERT INTO User(username, firstName, lastName, email, birthday,
     password, isAdmin, avatar, lastLogin, registerDate) VALUES
     ('admin', 'John', 'Smith', 'john@u.nus.edu', 01-01-1990, 'adm1n', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -104,5 +132,6 @@ INSERT INTO Flashcard(word, translation, setID) VALUES
 INSERT INTO UserCollection VALUES
     ('sumin', 1),
     ('sumin', 3),
+    ('sumin', 2),
     ('tim', 2),
     ('tim', 4);

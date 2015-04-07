@@ -38,7 +38,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <a href="/user/{{user.username}}/explore/featured/popular">Biggest Sets</a></span>
+                                        <a href="/user/{{user.username}}/explore/featured/biggest">Biggest Sets</a></span>
                                     </td>
                                 </tr>
                             </table>
@@ -58,7 +58,16 @@
                             	{% for category in categories %}
                                 <tr>
                                     <td>
-                                        <a href="/user/{{user.username}}/explore/category/{{loop.index}}">{{category.name}}</a></span>
+                                        <a href="/user/{{user.username}}/explore/category/{{loop.index}}">
+                                            {{category.name}} 
+                                            <span class="badge">
+                                                {% if category.catCount %}
+                                                {{category.catCount}}
+                                                {% else %}
+                                                0
+                                                {% endif %}
+                                            </span>
+                                        </a>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -79,7 +88,16 @@
                      			{% for language in languages %}
                                 <tr>
                                     <td>
-                                        <a href="/user/{{user.username}}/explore/language/{{loop.index}}">{{language.name}}</a>
+                                        <a href="/user/{{user.username}}/explore/language/{{loop.index}}">
+                                            {{language.name}}
+                                            <span class="badge">
+                                                {% if language.langCount %}
+                                                {{language.langCount}}
+                                                {% else %}
+                                                0
+                                                {% endif %}
+                                            </span>
+                                        </a>
                                     </td>
                                 </tr>
                                 {% endfor %}
