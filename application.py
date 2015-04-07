@@ -169,8 +169,30 @@ def searchSet(username):
 
 @app.route('/advancedSearch/<username>', methods=['POST'])
 def advancedSearch(username):
+    data = request.get_json()
+    
+    query = "SELECT s.setID, s.title, s.description, l.name AS language, \
+                    c.name AS category, s.creator, s.lastUpdate \
+            FROM CardSet s, Language l, Category c \
+            WHERE s.title LIKE '%' || ? || '%' \
+            AND s.description LIKE '%' || ? || '%' \
+            AND s.creator LIKE '%' || ? || '%' \
+            AND l.langID = s.language \
+            AND c.catID = s.category"
+    queryData = [data['title'], data['description'], data['author']]
 
-    return jsonify(data=request.get_json())
+
+    if int(data['language']) != 0:
+        query += " AND l.langID = ?"
+        queryData.append(int(data['language']))
+
+    if int(data['category']) != 0:
+        query += " AND c.catID = ?"
+        queryData.append(int(data['category']))
+
+    results = query_db(query, queryData)
+
+    return jsonify(results=results)
 
 
 @app.route('/quickSearch/<username>', methods=['POST'])
@@ -183,7 +205,7 @@ def quickSearch(username):
                         AND l.langID = s.language \
                         AND c.catID = s.category", 
                         [data['query']])
-    print results
+
     return jsonify(results=results)
 
 # starts the server 

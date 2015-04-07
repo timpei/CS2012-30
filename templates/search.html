@@ -76,6 +76,23 @@
             </div>
         </div>
     </div>
+    <div class="row" id="searchResults" ng-if="!intro">
+        <h2 ng-if="advanced">Advanced Search Results:</h2>
+        <h2 ng-if="!advanced">
+            <span ng-if="searchResultsQuery == ''">All </span>
+            Results
+            <span ng-if="searchResultsQuery != ''"> for "{[{searchResultsQuery}]}"</span>: 
+        </h2>
+        <div class="col-md-12">
+            <div class="list-group">
+                <a href="#" class="list-group-item" ng-repeat="set in searchResults">
+                    <h4 class="list-group-item-heading">{[{set.title}]}</h4>
+                    <p class="list-group-item-text">{[{set.description}]}</p>
+                </a>
+            </div>
+            <p ng-if="searchResults.length == 0">No Results. Try searching something!</p>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

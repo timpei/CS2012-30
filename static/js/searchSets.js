@@ -9,6 +9,7 @@ angular.module('searchSetApp', [])
     .controller('mainController', function($scope, $http, $location) {
         $scope.username = $location.path().match('user\/(.*)\/')[1],
 		$scope.tab = 'quick';
+		$scope.intro = true;
 
 		$scope.quick = { query: '' };
 		$scope.query = {
@@ -16,11 +17,22 @@ angular.module('searchSetApp', [])
 			category: 0
 		}
 
+		$scope.searchResults = [];
+		$scope.searchResultsQuery = ''
+
 		$scope.quickTab = function() {
+			$scope.quick = { query: '' };
 			$scope.tab = 'quick';
 		}
 
 		$scope.advancedTab = function() {
+			$scope.query = {
+				title: '',
+				description: '',
+				author: '',
+				language: 0,
+				category: 0,
+			}
 			$scope.tab = 'advanced';
 		}
 
@@ -32,6 +44,9 @@ angular.module('searchSetApp', [])
                 data: JSON.stringify($scope.query)
             }).success(function(data) {
             	console.log(data);
+            	$scope.searchResults = data.results;
+            	$scope.intro = false;
+            	$scope.advanced = true;
             });
 		}
 
@@ -43,6 +58,10 @@ angular.module('searchSetApp', [])
                 data: JSON.stringify($scope.quick)
             }).success(function(data) {
             	console.log(data);
+            	$scope.searchResults = data.results;
+            	$scope.searchResultsQuery = $scope.quick.query;
+            	$scope.intro = false;
+            	$scope.advanced = false;
             });
 		}
 	});
