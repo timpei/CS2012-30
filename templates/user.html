@@ -4,7 +4,7 @@
 
 {% block body %}
     {% if message != None %}
-    <div class="alert alert-success" role="alert">{{message}}</div>
+    <div class="alert alert-{{type}}" role="alert">{{message}}</div>
     {% endif %}
 
     <div class="row">
