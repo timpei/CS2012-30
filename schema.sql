@@ -79,8 +79,8 @@ INSERT INTO CardSet(title, description, language, creator, lastUpdate, category)
 INSERT INTO Flashcard(word, translation, setID) VALUES
     ('떡볶이', 'spicy rice cake', 1),
     ('파전', 'seafood pancake', 1),
-    ('냉면', 'spicy rice cake', 1),
-    ('갈비탕', 'pork bone soup', 1),
+    ('냉면', 'cold noodles', 1),
+    ('감자탕', 'pork bone soup', 1),
     ('불고기', 'marinated beef', 1),
     ('Hai', 'Hello', 2),
     ('Selamat datang', 'Welcome', 2),
