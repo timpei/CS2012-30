@@ -186,6 +186,25 @@ def quickSearch(username):
     print results
     return jsonify(results=results)
 
+
+@app.route('/flashcards/<setID>', methods=['GET'])
+def getFlashcards(setID):
+    flashcards = query_db('SELECT * FROM Flashcard WHERE setID = ?', [setID])
+    print flashcards
+    return jsonify(flashcards=flashcards)
+
+
+@app.route('/user/<username>/view/<setID>')
+def viewSet(username, setID):
+    user = query_db('SELECT * FROM User WHERE username = ?', [username], one=True)
+    cardSet = query_db("SELECT s.setID, s.title, s.description, l.name AS language, \
+                               c.name AS category, s.creator, s.lastUpdate \
+                        FROM CardSet s, Language l, Category c \
+                        WHERE setID = ? \
+                        AND l.langID = s.language \
+                        AND c.catID = s.category", [setID], one=True)
+    return render_template('browse.html', user=user, cardSet=cardSet)
+
 # starts the server 
 if __name__ == '__main__':
 

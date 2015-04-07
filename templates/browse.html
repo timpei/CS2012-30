@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block header %}flashcard{% endblock %}
+
+{% block body %}
+<hr/>
+    <link rel="stylesheet" href="/static/css/browse.css">
+    <script type="text/javascript" src="/static/lib/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="/static/lib/angular.min.js"></script>
+    <script type="text/javascript" src="/static/js/browseCard.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".flip").click(function(){
+              $(this).find(".card").toggleClass("flipped");
+              return false;
+            });
+        });
+    </script>
+
+
+  <h1>{{cardSet.title}} <small>by {{cardSet.creator}}</small></h1>
+
+
+<div class="container" ng-app="browseCardApp" ng-controller="cardController">
+    <div class="jumbotron">
+        <div class="row">
+            <div class="flip">
+                <div class="card">
+                    <div class="face front">{[{cards[index].word}]}</div>
+                    <div class="face back">{[{cards[index].translation}]}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4 col-md-4 center">
+        <button type="button" class="btn btn-default btn-lg" ng-click="previousCard()" ng-disabled="index==0">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>Previous
+        </button>
+    </div>
+    <div class="col-xs-4 col-md-4 center page">{[{index+1}]}/{[{cards.length}]}</div>
+    <div class="col-xs-4 col-md-4 center">
+        <button type="button" class="btn btn-default btn-lg" ng-click="nextCard()" ng-disabled="index>=cards.length-1">
+            Next<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        </button>
+    </div>
+</div>
+
+<br/>
+<dl class="dl-horizontal">
+    <dt>Description</dt><dd>{{cardSet.description}}</dd>
+    <dt>Language</dt><dd>{{cardSet.language}}</dd>
+    <dt>Category</dt><dd>{{cardSet.category}}</dd>
+    <dt>Last updated</dt><dd>{{cardSet.lastUpdate}}</dd>
+</dl>
+
+{% endblock %}

@@ -3,8 +3,6 @@
 {% block header %}flashcards - Hello {{user.firstName}}!{% endblock %}
 
 {% block body %}
-    <link rel="stylesheet" href="/static/user.css">
-
     {% if message != None %}
     <div class="alert alert-success" role="alert">{{message}}</div>
     {% endif %}
@@ -21,7 +19,7 @@
 
                 <ul class="list-group">
                     {% for cardSet in myCardSets %}
-                        <a href="#" class="list-group-item">
+                        <a href="/user/{{user.username}}/view/{{cardSet.setID}}" class="list-group-item">
                             <h4 class="list-group-item-heading">{{cardSet.title}}</h4>
                             <p class="list-group-item-text">{{cardSet.description}}</p>
                             <p class="list-group-item-text">Language: {{languages[cardSet.language-1].name}}</p>
@@ -39,7 +37,7 @@
                 </div>
                 <ul class="list-group">
                     {% for cardSet in allCardSets %}
-                        <a href="#" class="list-group-item">
+                        <a href="/user/{{user.username}}/view/{{cardSet.setID}}" class="list-group-item">
                             <h4 class="list-group-item-heading">{{cardSet.title}}</h4>
                             <p class="list-group-item-text">{{cardSet.description}}</p>
                             <p class="list-group-item-text">Language: {{languages[cardSet.language-1].name}}</p>
