@@ -240,6 +240,20 @@ def viewSet(username, setID):
                         AND c.catID = s.category", [setID], one=True)
     return render_template('browse.html', user=user, cardSet=cardSet)
 
+
+@app.route('/user/<username>/explore')
+def exploreSets(username):
+    user = query_db('SELECT * FROM User WHERE username = ?', [username], one=True)
+    languages = query_db('SELECT name FROM Language ORDER BY langID')
+    categories = query_db('SELECT name FROM Category ORDER BY catID')
+    allCardSets = [cardSet for cardSet in query_db('SELECT * FROM CardSet')]
+
+    return render_template('explore.html', user=user, 
+                                        languages=languages,
+                                        categories=categories,
+                                        title="All Sets",
+                                        sets=allCardSets)
+
 # starts the server 
 if __name__ == '__main__':
 

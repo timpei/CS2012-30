@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block header %}flashcards - Expore Sets{% endblock %}
+
+{% block body %}
+
+<link rel="stylesheet" href="/static/css/explore.css">
+
+<script type="text/javascript" src="/static/lib/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="/static/lib/bootstrap/js/bootstrap.min.js"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3 col-md-3">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="/user/{{user.username}}/explore">
+                            </span>All Sets</a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-star">
+                            </span>Featured</a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        <a href="/user/{{user.username}}/explore/featured/popular">Most Popular</a></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="/user/{{user.username}}/explore/featured/popular">Biggest Sets</a></span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><span class="glyphicon glyphicon-th">
+                            </span>Categories</a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <table class="table">
+                            	{% for category in categories %}
+                                <tr>
+                                    <td>
+                                        <a href="/user/{{user.username}}/explore/category/{{loop.index}}">{{category.name}}</a></span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"><span class="glyphicon glyphicon-globe">
+                            </span>Language</a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <table class="table">
+                     			{% for language in languages %}
+                                <tr>
+                                    <td>
+                                        <a href="/user/{{user.username}}/explore/language/{{loop.index}}">{{language.name}}</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9 col-md-9">
+            <div class="well">
+                <h1>{{title}}</h1>
+                <p>{{sets|length}} found.</p>
+
+	            <div class="list-group">
+                	{% for set in sets %}
+	                <a href="/user/{{user.username}}/view/{{set.setID}}" class="list-group-item">
+	                    <h4 class="list-group-item-heading">{{set.title}}</h4>
+	                    <p class="list-group-item-text">{{set.description}}</p>
+	                </a>
+	            	{% endfor %}
+	            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
