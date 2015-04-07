@@ -237,7 +237,30 @@ def getFlashcards(setID):
 def getSet(setID):
     cardSet = query_db("SELECT * FROM CardSet WHERE setID = ?", 
                         [setID], one=True)
-    return jsonify(result=cardSet)
+    return jsonify(result=cardSet) 
+
+@app.route('/user/<username>/addSet/<setID>', methods=['POST'])
+def addUserCollection(username, setID):
+    cursor = get_db().cursor()
+    cursor.execute('INSERT INTO UserCollection VALUES (?, ?)', [username, setID])
+    get_db().commit()
+    # TODO(sumin): catch error
+    return 'True'
+
+@app.route('/user/<username>/removeSet/<setID>', methods=['POST'])
+def removeUserCollection(username, setID):
+    cursor = get_db().cursor()
+    cursor.execute('DELETE FROM UserCollection WHERE username = ? AND setID = ?', [username, setID])
+    get_db().commit()
+    # TODO(sumin): catch error
+    return 'True'
+
+@app.route('/user/<username>/hasSet/<setID>', methods=['GET'])
+def getHasSet(username, setID):
+    hasSet = query_db("SELECT 1 FROM UserCollection WHERE username = ? AND setID = ?",
+                      [username, setID], one=True)
+    hasSet = hasSet is not None
+    return jsonify(hasSet=hasSet)
 
 @app.route('/user/<username>/view/<setID>')
 def viewSet(username, setID):

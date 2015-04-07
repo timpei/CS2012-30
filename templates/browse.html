@@ -14,53 +14,54 @@
                 $(this).find(".card").toggleClass("flipped");
                 return false;
             });
-
-            $('#star').click( function(){
-                $(this).find('span').toggleClass('glyphicon-star-empty').toggleClass('glyphicon-star');
-            });
         });
     </script>
 
+<div ng-app="browseCardApp" ng-controller="cardController">
+    <div class="container row" style="margin-bottom:10px">
+        <h1>
+            <div class="col-md-11">{{cardSet.title}}
+                <small>by {{cardSet.creator}}</small>
+            </div>
+            <div class="col-md-1">
+                <a id="star" class="btn btn-default" ng-click="addRemoveSet()" style="float: right">
+                    <span ng-class="hasSet ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'"></span>
+                     {[{addSetText}]}
+                </a>
+            </div>
+        </h1>
+    </div>
 
-<h1>
-    {{cardSet.title}}
-    <small>by {{cardSet.creator}}</small>
-    <small>
-        <a id="star"><span class="glyphicon glyphicon-star-empty"></span></a>
-    </small>
-</h1>
-
-
-<div class="container" ng-app="browseCardApp" ng-controller="cardController">
-    <div class="jumbotron">
-        <div class="row">
-            <div class="flip">
-                <div class="card">
-                    <div class="face front">{[{cards[index].word}]}</div>
-                    <div class="face back">{[{cards[index].translation}]}</div>
+    <div class="container">
+        <div class="jumbotron">
+            <div class="row">
+                <div class="flip">
+                    <div class="card">
+                        <div class="face front">{[{cards[index].word}]}</div>
+                        <div class="face back">{[{cards[index].translation}]}</div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="col-xs-4 col-md-4 center">
+            <button type="button" class="btn btn-default btn-lg" ng-click="previousCard()" ng-disabled="index==0">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>Previous
+            </button>
+        </div>
+        <div class="col-xs-4 col-md-4 center page">{[{index+1}]}/{[{cards.length}]}</div>
+        <div class="col-xs-4 col-md-4 center">
+            <button type="button" class="btn btn-default btn-lg" ng-click="nextCard()" ng-disabled="index>=cards.length-1">
+                Next<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            </button>
+        </div>
     </div>
-    <div class="col-xs-4 col-md-4 center">
-        <button type="button" class="btn btn-default btn-lg" ng-click="previousCard()" ng-disabled="index==0">
-            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>Previous
-        </button>
-    </div>
-    <div class="col-xs-4 col-md-4 center page">{[{index+1}]}/{[{cards.length}]}</div>
-    <div class="col-xs-4 col-md-4 center">
-        <button type="button" class="btn btn-default btn-lg" ng-click="nextCard()" ng-disabled="index>=cards.length-1">
-            Next<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        </button>
-    </div>
+
+    <br/>
+    <dl class="dl-horizontal">
+        <dt>Description</dt><dd>{{cardSet.description}}</dd>
+        <dt>Language</dt><dd>{{cardSet.language}}</dd>
+        <dt>Category</dt><dd>{{cardSet.category}}</dd>
+        <dt>Last updated</dt><dd>{{cardSet.lastUpdate}}</dd>
+    </dl>
 </div>
-
-<br/>
-<dl class="dl-horizontal">
-    <dt>Description</dt><dd>{{cardSet.description}}</dd>
-    <dt>Language</dt><dd>{{cardSet.language}}</dd>
-    <dt>Category</dt><dd>{{cardSet.category}}</dd>
-    <dt>Last updated</dt><dd>{{cardSet.lastUpdate}}</dd>
-</dl>
-
 {% endblock %}
