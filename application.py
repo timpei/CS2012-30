@@ -143,12 +143,22 @@ def createSet(username):
 def submitSetCreate(username):
     data = request.get_json()
     cursor = get_db().cursor()
-    cursor.execute('INSERT INTO CardSet '
-                     '(title, description, language, creator, lastUpdate, category) VALUES '
-                     '(?, ?, ?, ?, ?, ?)',
-                      [data['title'], data['description'], data['language'], data['author'],
-                      datetime.now(), data['category']])
+    if 'description' in data:
+        cursor.execute('INSERT INTO CardSet '
+                         '(title, description, language, creator, lastUpdate, category) VALUES '
+                         '(?, ?, ?, ?, ?, ?)',
+                          [data['title'], data['description'], data['language'], data['author'],
+                          datetime.now(), data['category']])
+    else:
+        cursor.execute('INSERT INTO CardSet '
+                         '(title, language, creator, lastUpdate, category) VALUES '
+                         '(?, ?, ?, ?, ?, ?)',
+                          [data['title'], data['language'], data['author'],
+                          datetime.now(), data['category']])
     setId = cursor.lastrowid
+
+    cursor.execute('INSERT INTO UserCollection  VALUES (?, ?)',
+                    [data['author'], setId])
     
     for card in data['flashcards']:
         cursor.execute('INSERT INTO Flashcard'
