@@ -18,21 +18,39 @@
     </script>
 
 <div ng-app="browseCardApp" ng-controller="cardController">
-    <div class="container row" style="margin-bottom:10px">
-        <h1>
-            <div class="col-md-11">{{cardSet.title}}
-                <small>by {{cardSet.creator}}</small>
-            </div>
-            <div class="col-md-1">
-                <a id="star" class="btn btn-default" ng-click="addRemoveSet()" style="float: right">
-                    <span ng-class="hasSet ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'"></span>
-                     {[{addSetText}]}
-                </a>
-            </div>
-        </h1>
-    </div>
-
     <div class="container">
+        <div class="row" style="margin-bottom:10px">
+            <div class="col-md-9">
+                <h1>{{cardSet.title}} <small>by {{cardSet.creator}}</small></h1>
+            </div>
+            <div class="col-md-3 card-actions">
+                <table>
+                    <tr>
+                        <td>
+                            <a id="star" class="btn btn-default" ng-click="addRemoveSet()">
+                                <span ng-class="hasSet ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-star-empty'"></span>
+                                 {[{addSetText}]}
+                            </a>
+                        </td>
+                        {% if user.isAdmin %}
+                        <td>
+                            <a class="btn btn-warning" href="/user/{{user.username}}/edit/{{cardSet.setID}}">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                Edit
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-danger" href="/user/{{user.username}}/delete/{{cardSet.setID}}">
+                                <span class="glyphicon glyphicon-trash"></span>
+                                Delete
+                            </a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                </table>
+            </div>
+            
+        </div>
         <div class="jumbotron">
             <div class="row">
                 <div class="flip">

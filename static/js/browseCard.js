@@ -2,14 +2,10 @@
 angular.module('browseCardApp', [])
     .config(function($interpolateProvider, $locationProvider){
         $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
-        $locationProvider.html5Mode({
-            enabled: true,
-            requireBase: false
-        });
     })
     .controller('cardController', function($scope, $http, $location) {
-        $scope.username = $location.path().match('user\/(.*)\/view')[1],
-        $scope.setID = $location.path().match('view\/([0-9]+)')[1],
+        $scope.username = window.location.pathname.match('user\/(.*)\/view')[1],
+        $scope.setID = window.location.pathname.match('view\/([0-9]+)')[1],
         $scope.index = 0,
         $scope.hasSet = false,
         $scope.addSetText = 'Add',

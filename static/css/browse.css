@@ -1,3 +1,14 @@
+.card-actions {
+  margin-top: 28px;
+}
+
+.card-actions > table {
+  float: right;
+}
+
+.card-actions a {
+  margin-left: 5px;
+}
 
 .flip {
   -webkit-perspective: 800;
