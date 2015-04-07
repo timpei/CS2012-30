@@ -254,6 +254,25 @@ def exploreSets(username):
                                         title="All Sets",
                                         sets=allCardSets)
 
+@app.route('/user/<username>/explore/<group>/<index>')
+def exploreGroups(username, group, index):
+    user = query_db('SELECT * FROM User WHERE username = ?', [username], one=True)
+    languages = query_db('SELECT name FROM Language ORDER BY langID')
+    categories = query_db('SELECT name FROM Category ORDER BY catID')
+
+    if group == 'category':
+        allCardSets = [cardSet for cardSet in query_db('SELECT * FROM CardSet WHERE category == ?', [int(index)])]
+        name = categories[int(index)-1]['name']
+    else:
+        allCardSets = [cardSet for cardSet in query_db('SELECT * FROM CardSet WHERE language == ?', [int(index)])]
+        name = languages[int(index)-1]['name']
+
+    return render_template('explore.html', user=user, 
+                                        languages=languages,
+                                        categories=categories,
+                                        title='Brwosing "%s"' % name,
+                                        sets=allCardSets)
+
 # starts the server 
 if __name__ == '__main__':
 
