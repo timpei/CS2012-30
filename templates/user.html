@@ -1,7 +1,4 @@
 {% extends "base.html" %}
-
-{% block header %}flashcards - Hello {{user.firstName}}!{% endblock %}
-
 {% block body %}
     {% if message != None %}
     <div class="alert alert-{{type}}" role="alert">{{message}}</div>
