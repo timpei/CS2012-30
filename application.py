@@ -72,7 +72,18 @@ def login():
         bannerMessage = 'Your username or password is incorrect.'
     else:
         bannerMessage = None
-    return render_template('login.html', message=bannerMessage, type=type)
+
+
+    # get aggregates
+    usercount = query_db("SELECT COUNT(*) AS count FROM User", one=True)
+    setcount = query_db("SELECT COUNT(*) AS count FROM CardSet", one=True)
+    cardcount = query_db("SELECT COUNT(*) AS count FROM Flashcard", one=True)
+    langcount = query_db("SELECT COUNT(*) AS count FROM Language", one=True)
+    catcount = query_db("SELECT COUNT(*) AS count FROM Category", one=True)
+
+    return render_template('login.html', message=bannerMessage, type=type,
+                           usercount=usercount, setcount=setcount, cardcount=cardcount,
+                           langcount=langcount, catcount=catcount)
 
 @app.route('/submit_login', methods=['POST'])
 def submitLogin():
@@ -128,6 +139,11 @@ def userDashboard(username):
                                                   [username])]
     allCardSets = [cardSet for cardSet in query_db('SELECT * FROM CardSet WHERE creator <> ? LIMIT 5', [username])]
 
+    # update user last login time
+    cursor = get_db().cursor()
+    cursor.execute("""UPDATE User SET lastLogin = CURRENT_TIMESTAMP WHERE username = ?""", [username])
+    get_db().commit()
+
     return render_template('user.html', languages=languages, user=user, myCardSets=myCardSets,
                            allCardSets=allCardSets, message=bannerMessage, type=type,
                            avatar=getAvatarColor(user))
@@ -164,14 +180,14 @@ def submitSetCreate(username):
     cursor = get_db().cursor()
     if 'description' in data:
         cursor.execute('INSERT INTO CardSet '
-                         '(title, description, language, creator, lastUpdate, category) VALUES '
-                         '(?, ?, ?, ?, ?, ?)',
+                         '(title, description, language, creator, lastUpdate, category, viewCount) VALUES '
+                         '(?, ?, ?, ?, ?, ?, 0)',
                           [data['title'], data['description'], data['language'], data['creator'],
                           datetime.now(), data['category']])
     else:
         cursor.execute('INSERT INTO CardSet '
-                         '(title, language, creator, lastUpdate, category) VALUES '
-                         '(?, ?, ?, ?, ?)',
+                         '(title, language, creator, lastUpdate, category, viewCount) VALUES '
+                         '(?, ?, ?, ?, ?, 0)',
                           [data['title'], data['language'], data['creator'],
                           datetime.now(), data['category']])
     setId = cursor.lastrowid
@@ -245,7 +261,7 @@ def advancedSearch(username):
     data = request.get_json()
     
     query = "SELECT s.setID, s.title, s.description, l.name AS language, \
-                    c.name AS category, s.creator, s.lastUpdate \
+                    c.name AS category, s.creator, s.lastUpdate, s.viewCount \
             FROM CardSet s, Language l, Category c \
             WHERE s.title LIKE '%' || ? || '%' \
             AND s.description LIKE '%' || ? || '%' \
@@ -272,7 +288,7 @@ def advancedSearch(username):
 def quickSearch(username):
     data = request.get_json()
     results = query_db("SELECT s.setID, s.title, s.description, l.name AS language, \
-                                c.name AS category, s.creator, s.lastUpdate \
+                                c.name AS category, s.creator, s.lastUpdate, s.viewCount \
                         FROM CardSet s, Language l, Category c \
                         WHERE title LIKE '%' || ? || '%' \
                         AND l.langID = s.language \
@@ -340,11 +356,15 @@ def getHasSet(username, setID):
 def viewSet(username, setID):
     user = query_db('SELECT * FROM User WHERE username = ?', [username], one=True)
     cardSet = query_db("SELECT s.setID, s.title, s.description, l.name AS language, \
-                               c.name AS category, s.creator, s.lastUpdate \
+                               c.name AS category, s.creator, s.lastUpdate, s.viewCount \
                         FROM CardSet s, Language l, Category c \
                         WHERE setID = ? \
                         AND l.langID = s.language \
                         AND c.catID = s.category", [setID], one=True)
+    cursor = get_db().cursor()
+    cursor.execute("""UPDATE CardSet SET viewCount = ? WHERE setID = ?""",
+                          [cardSet['viewCount']+1, setID])
+    get_db().commit()
     return render_template('browse.html', user=user, cardSet=cardSet, avatar=getAvatarColor(user))
 
 

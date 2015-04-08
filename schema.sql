@@ -28,7 +28,8 @@ CREATE TABLE CardSet (
 	language INTEGER REFERENCES Language(langID),
 	creator REFERENCES User(username),
 	lastUpdate DATETIME NOT NULL,
-	category INTEGER REFERENCES Category(catID)
+	category INTEGER REFERENCES Category(catID),
+    viewCount INTEGER NOT NULL
 );
 
 CREATE TABLE Flashcard( 
@@ -112,16 +113,16 @@ INSERT INTO Category(name) VALUES
     ('Numbers'),
     ('Slang');
 
-INSERT INTO CardSet(title, description, language, creator, lastUpdate, category) VALUES
-    ('Food', 'Korean food terms', 8, 'sumin', CURRENT_TIMESTAMP, 1),
-    ('Greetings', 'Simple greetings in Malay', 5, 'tim', CURRENT_TIMESTAMP, 3),
-    ('Greetings', 'Spanish greetings', 3, 'sumin', CURRENT_TIMESTAMP, 3),
-    ('Greetings', 'Chinese greetings', 4, 'tim', CURRENT_TIMESTAMP, 4),
-    ('Romance', 'Japanese pickup lines', 7, 'ironman', CURRENT_TIMESTAMP, 1),
-    ('Colours', 'Chinese colours', 4, 'kathy123', CURRENT_TIMESTAMP, 1),
-    ('School', 'French classroom items', 2, 'kathy123', CURRENT_TIMESTAMP, 5),
-    ('Colours', 'French colours', 2, 'janejane', CURRENT_TIMESTAMP, 2),
-    ('Numbers', 'Italian numbers', 9, 'janejane', CURRENT_TIMESTAMP, 6);
+INSERT INTO CardSet(title, description, language, creator, lastUpdate, category, viewCount) VALUES
+    ('Food', 'Korean food terms', 8, 'sumin', CURRENT_TIMESTAMP, 1, 1),
+    ('Greetings', 'Simple greetings in Malay', 5, 'tim', CURRENT_TIMESTAMP, 3, 1),
+    ('Greetings', 'Spanish greetings', 3, 'sumin', CURRENT_TIMESTAMP, 3, 1),
+    ('Greetings', 'Chinese greetings', 4, 'tim', CURRENT_TIMESTAMP, 4, 1),
+    ('Romance', 'Japanese pickup lines', 7, 'ironman', CURRENT_TIMESTAMP, 1, 1),
+    ('Colours', 'Chinese colours', 4, 'kathy123', CURRENT_TIMESTAMP, 1, 1),
+    ('School', 'French classroom items', 2, 'kathy123', CURRENT_TIMESTAMP, 5, 1),
+    ('Colours', 'French colours', 2, 'janejane', CURRENT_TIMESTAMP, 2, 1),
+    ('Numbers', 'Italian numbers', 9, 'janejane', CURRENT_TIMESTAMP, 6, 1);
 
 INSERT INTO Flashcard(word, translation, setID) VALUES
     ('떡볶이', 'spicy rice cake', 1),

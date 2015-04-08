@@ -18,4 +18,17 @@
             </form>
         </div>
     </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Statistics</div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>Number of Users</dt><dd>{{usercount.count}}</dd>
+                <dt>Number of Sets</dt><dd>{{setcount.count}}</dd>
+                <dt>Number of Flashcards</dt><dd>{{cardcount.count}}</dd>
+                <dt>Supported Languages</dt><dd>{{langcount.count}}</dd>
+                <dt>Number of Categories</dt><dd>{{catcount.count}}</dd>
+            </dl>
+        </div>
+    </div>
 {% endblock %}
