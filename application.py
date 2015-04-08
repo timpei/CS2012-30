@@ -131,7 +131,8 @@ def userDashboard(username):
     allCardSets = [cardSet for cardSet in query_db('SELECT * FROM CardSet WHERE creator <> ? LIMIT 5', [username])]
 
     return render_template('user.html', languages=languages, user=user, myCardSets=myCardSets,
-                           allCardSets=allCardSets, message=bannerMessage, type=type)
+                           allCardSets=allCardSets, message=bannerMessage, type=type,
+                           avatar=getAvatarColor(user['avatar']))
 
 # TODO(tim): Change add card button ui (put it on top of the delete button)
 @app.route('/user/<username>/create')
@@ -149,7 +150,8 @@ def createSet(username, setID=None):
     return render_template('create.html', user=user, 
                                         languages=languages,
                                         categories=categories,
-                                        mode=mode)
+                                        mode=mode,
+                                        avatar=getAvatarColor(user['avatar']))
 
 @app.route('/create_set/<username>', methods=['POST'])
 def submitSetCreate(username):
@@ -229,7 +231,8 @@ def searchSet(username):
 
     return render_template('search.html', user=user, 
                                         languages=languages,
-                                        categories=categories)
+                                        categories=categories,
+                                        avatar=getAvatarColor(user['avatar']))
 
 
 @app.route('/advancedSearch/<username>', methods=['POST'])
@@ -318,7 +321,7 @@ def viewSet(username, setID):
                         WHERE setID = ? \
                         AND l.langID = s.language \
                         AND c.catID = s.category", [setID], one=True)
-    return render_template('browse.html', user=user, cardSet=cardSet)
+    return render_template('browse.html', user=user, cardSet=cardSet, avatar=getAvatarColor(user['avatar']))
 
 
 @app.route('/user/<username>/explore')
@@ -340,7 +343,8 @@ def exploreSets(username):
                                         languages=languages,
                                         categories=categories,
                                         title="Browsing all sets",
-                                        sets=allCardSets)
+                                        sets=allCardSets,
+                                        avatar=getAvatarColor(user['avatar']))
 
 @app.route('/user/<username>/explore/<group>/<index>')
 def exploreGroups(username, group, index):
@@ -380,7 +384,12 @@ def exploreGroups(username, group, index):
                                         languages=languages,
                                         categories=categories,
                                         title='Browsing "%s"' % name,
-                                        sets=allCardSets)
+                                        sets=allCardSets,
+                                        avatar=getAvatarColor(user['avatar']))
+
+def getAvatarColor(avatar):
+    color = ["#F25E5E", "#F2BE6B", "#F2EE6B", "#6BF29F", "#6BB3F2", "#BBA3F4"]
+    return color[avatar-1]
 
 # starts the server 
 if __name__ == '__main__':

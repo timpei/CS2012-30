@@ -39,7 +39,12 @@
         {% endif %}
 
         {% if user %}
-            <p class="navbar-text navbar-right" id="login-nav">Signed in as {{user.username}}</p>
+        <a href="/user/{{user.username}}/profile">
+            <ul class="nav navbar-nav navbar-right">
+                <li><p class="navbar-text " id="login-nav">{{user.username}}</p></li>
+                <li><span class="avatar" style="background-color: {{avatar}}"></span></li>
+            </ul>
+        </a>
         {% endif %}
     </div>
 </nav>  
