@@ -24,11 +24,12 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-star">
-                            </span>Featured</a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                <span class="glyphicon glyphicon-star"></span>Featured
+                            </a>
                         </h4>
                     </div>
-                    <div id="collapseOne" class="panel-collapse collapse">
+                    <div id="collapseOne" class="panel-collapse collapse {% if group == 'featured' %}in{% endif %}">
                         <div class="panel-body">
                             <table class="table">
                                 <tr>
@@ -52,7 +53,7 @@
                             </span>Categories</a>
                         </h4>
                     </div>
-                    <div id="collapseTwo" class="panel-collapse collapse">
+                    <div id="collapseTwo" class="panel-collapse collapse {% if group == 'category' %}in{% endif %}">
                         <div class="panel-body">
                             <table class="table">
                             	{% for category in categories %}
@@ -82,7 +83,7 @@
                             </span>Language</a>
                         </h4>
                     </div>
-                    <div id="collapseThree" class="panel-collapse collapse">
+                    <div id="collapseThree" class="panel-collapse collapse {% if group == 'language' %}in{% endif %}">
                         <div class="panel-body">
                             <table class="table">
                      			{% for language in languages %}

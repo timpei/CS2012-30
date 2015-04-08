@@ -380,7 +380,8 @@ def exploreGroups(username, group, index):
                                         languages=languages,
                                         categories=categories,
                                         title='Browsing "%s"' % name,
-                                        sets=allCardSets)
+                                        sets=allCardSets,
+                                        group=group)
 
 # starts the server 
 if __name__ == '__main__':
