@@ -13,11 +13,10 @@ Set up the environment. First make sure you have /usr/local/bin defined in your 
 ```
 export PATH=/usr/local/bin:$PATH
 ```
-Check by typing 
+Check by typing the following in the terminal and looking for /usr/local/bin
 ```
 echo $PATH
 ```
-in the terminal and looking for /usr/local/bin
 
 Run the following commands line by line.
 ```
@@ -44,6 +43,7 @@ python application.py
 
 Open your browser to http://localhost:5000/ and you're all set.
 
+---
 
 From now on, to start the application, you only need to run the following two commands inside your CS2102-30 folder
 ```
