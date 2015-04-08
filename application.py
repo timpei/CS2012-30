@@ -61,7 +61,18 @@ WEB PAGES
 
 @app.route('/')
 def login():
-    return render_template('login.html')
+    banner = request.args.get('banner')
+    type = 'danger'
+    if banner == 'signup_success':
+        bannerMessage = 'Sign up was successful! Please login below.'
+        type = 'success'
+    elif banner == 'signup_failure':
+        bannerMessage = 'Sign up was unsuccessful. Please try again'
+    elif banner == 'login_failure':
+        bannerMessage = 'Your username or password is incorrect.'
+    else:
+        bannerMessage = None
+    return render_template('login.html', message=bannerMessage, type=type)
 
 @app.route('/submit_login', methods=['POST'])
 def submitLogin():
@@ -76,36 +87,22 @@ def submitLogin():
     # if user doesn't exist or password is incorrect
     # TODO(sumin): Decode password
     if user is None or user["password"] != password:
-        return render_template('login.html', failed=True)
+        return redirect(url_for('login', banner='login_failure'))
 
     return redirect(url_for('userDashboard', username=username))
 
 @app.route('/submit_signup', methods=['POST'])
 def submitSignup():
-    # get all the sign up information from the form
-    username=request.form['username']
-    password=request.form['password']
-    firstname=request.form['firstname']
-    lastname=request.form['lastname']
-    email=request.form['email']
-    birthday=request.form['birthday']
-    avatar=request.form['inlineRadio']
-
-    # TODO(sumin): Encode password, check date, catch error
-    # add the user into the database if it doesn't exist
-    get_db().execute('INSERT INTO User '
-                     '(username, firstName, lastName, email, birthday, password,'
-                     'isAdmin, avatar, lastLogin, registerDate) VALUES '
-                     '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                     [username, firstname, lastname, email, birthday, password,
-                      False, avatar, datetime.now(), datetime.now()])
+    data = request.get_json()
+    cursor = get_db().cursor()
+    cursor.execute("""INSERT INTO User
+                      (username, firstName, lastName, email, birthday, password,
+                      isAdmin, avatar, lastLogin, registerDate) VALUES
+                      (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                      [data['username'], data['firstName'], data['lastName'], data['email'], data['birthday'],
+                       data['password'], False, data['avatar'], datetime.now(), datetime.now()])
     get_db().commit()
-
-    # boolean for insert success (always success for now)
-    # TODO(sumin): Check the db execute function to see if insert was successful
-    success=True
-
-    return render_template('login.html', signUp=True, success=success)
+    return 'True'
 
 @app.route('/user/<username>')
 def userDashboard(username):
@@ -133,12 +130,14 @@ def userDashboard(username):
 
     return render_template('user.html', languages=languages, user=user, myCardSets=myCardSets,
                            allCardSets=allCardSets, message=bannerMessage, type=type,
-                           avatar=getAvatarColor(user['avatar']))
+                           avatar=getAvatarColor(user))
 
+@app.route('/signup')
 @app.route('/user/<username>/profile')
-def profile(username):
+def profile(username=None):
+    mode = 'edit' if username else 'signup'
     user = query_db('SELECT * FROM User WHERE username = ?', [username], one=True)
-    return render_template('profile.html', user=user, avatar=getAvatarColor(user['avatar']))
+    return render_template('profile.html', user=user, mode=mode, avatar=getAvatarColor(user))
 
 # TODO(tim): Change add card button ui (put it on top of the delete button)
 @app.route('/user/<username>/create')
@@ -157,7 +156,7 @@ def createSet(username, setID=None):
                                         languages=languages,
                                         categories=categories,
                                         mode=mode,
-                                        avatar=getAvatarColor(user['avatar']))
+                                        avatar=getAvatarColor(user))
 
 @app.route('/create_set/<username>', methods=['POST'])
 def submitSetCreate(username):
@@ -238,7 +237,7 @@ def searchSet(username):
     return render_template('search.html', user=user, 
                                         languages=languages,
                                         categories=categories,
-                                        avatar=getAvatarColor(user['avatar']))
+                                        avatar=getAvatarColor(user))
 
 
 @app.route('/advancedSearch/<username>', methods=['POST'])
@@ -346,7 +345,7 @@ def viewSet(username, setID):
                         WHERE setID = ? \
                         AND l.langID = s.language \
                         AND c.catID = s.category", [setID], one=True)
-    return render_template('browse.html', user=user, cardSet=cardSet, avatar=getAvatarColor(user['avatar']))
+    return render_template('browse.html', user=user, cardSet=cardSet, avatar=getAvatarColor(user))
 
 
 @app.route('/user/<username>/explore')
@@ -369,7 +368,7 @@ def exploreSets(username):
                                         categories=categories,
                                         title="Browsing all sets",
                                         sets=allCardSets,
-                                        avatar=getAvatarColor(user['avatar']))
+                                        avatar=getAvatarColor(user))
 
 @app.route('/user/<username>/explore/<group>/<index>')
 def exploreGroups(username, group, index):
@@ -411,11 +410,13 @@ def exploreGroups(username, group, index):
                                         title='Browsing "%s"' % name,
                                         sets=allCardSets,
                                         group=group,
-                                        avatar=getAvatarColor(user['avatar']))
+                                        avatar=getAvatarColor(user))
 
-def getAvatarColor(avatar):
+def getAvatarColor(user):
+    if user is None:
+        return -1
     color = ["#F25E5E", "#F2BE6B", "#F2EE6B", "#6BF29F", "#6BB3F2", "#BBA3F4"]
-    return color[avatar-1]
+    return color[user['avatar']-1]
 
 # starts the server 
 if __name__ == '__main__':

@@ -9,7 +9,10 @@ angular.module('editProfileApp', [])
         });
     })
     .controller('profileController', function($scope, $http, $location) {
-        $scope.username = window.location.pathname.match('user\/(.*)\/profile')[1],
+        if (window.location.pathname.match('user\/(.*)\/profile')) {
+            $scope.username = window.location.pathname.match('user\/(.*)\/profile')[1];
+        }
+
         $scope.avatars = ['#F25E5E', '#F2BE6B', '#F2EE6B', '#6BF29F', '#6BB3F2', '#BBA3F4'];
 
         $scope.getUser = function() {
@@ -36,6 +39,18 @@ angular.module('editProfileApp', [])
                 data: JSON.stringify($scope.user)
             }).success(function(data) {
                 window.location.replace('/user/' + $scope.username + '?banner=profile_edit_success');
+            });
+        }
+
+        $scope.submitSignup = function() {
+            console.log($scope.user);
+            $http({
+                url: '/submit_signup',
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                data: JSON.stringify($scope.user)
+            }).success(function(data) {
+                window.location.replace('/' + '?banner=signup_success');
             });
         }
 
