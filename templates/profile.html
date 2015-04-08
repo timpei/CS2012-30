@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block body %}
+    <link rel="stylesheet" href="/static/css/login.css">
+
+    <script type="text/javascript" src="/static/lib/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="/static/lib/angular.min.js"></script>
+    <script type="text/javascript" src="/static/js/editProfile.js"></script>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Edit Profile</div>
+        <div class="panel-body">
+            <form class="form-horizontal" action="/create_set/{{user.username}}"
+                  ng-app="editProfileApp" ng-controller="profileController">
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Username</label>
+                    <div class="col-md-10">
+                        <input type="text" ng-model="username" class="form-control" disabled>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Password</label>
+                    <div class="col-md-10">
+                        <input type="password" ng-model="user.password" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">First Name</label>
+                    <div class="col-md-10">
+                        <input type="text" ng-model="user.firstName" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Last Name</label>
+                    <div class="col-md-10">
+                        <input type="text" ng-model="user.lastName" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Email</label>
+                    <div class="col-md-10">
+                        <input type="text" ng-model="user.email" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Date of Birth</label>
+                    <div class="col-md-10">
+                        <input type="text" ng-model="user.birthday" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Avatar</label>
+                    <div class="col-md-10">
+                        <label class="radio-inline" ng-repeat="avatar in avatars track by $index">
+                            <input type="radio" name="inlineRadio" id="radio{[{$index+1}]}" value="{[{$index+1}]}"/>
+                            <label for="radio{[{$index+1}]}" style="background-color: {[{avatar}]}"
+                                   ng-click="setAvatar($index+1)"></label>
+                        </label>
+
+                    </div>
+                </div>
+                <a class="btn btn-bg btn-primary" ng-click="submitEdit()">Edit Profile</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -115,6 +115,8 @@ def userDashboard(username):
         bannerMessage = 'Success! Your set has been created.'
     elif banner == 'edit_success':
         bannerMessage = 'Success! The set has be updated.'
+    elif banner == 'profile_edit_success':
+        bannerMessage = 'Success! Your profile has be updated.'
     elif banner == 'not_admin':
         bannerMessage = 'Sorry, you do not have edit privileges.'
         type = 'danger'
@@ -122,8 +124,7 @@ def userDashboard(username):
         bannerMessage = None
 
     languages = query_db('SELECT * FROM Language')
-    user = query_db('SELECT * FROM User WHERE username = ?',
-                    [username], one=True)
+    user = query_db('SELECT * FROM User WHERE username = ?', [username], one=True)
     myCardSets = [cardSet for cardSet in query_db("""SELECT * FROM CardSet c, UserCollection u
                                                      WHERE u.username = ?
                                                      AND c.setID = u.setID""",
@@ -131,7 +132,13 @@ def userDashboard(username):
     allCardSets = [cardSet for cardSet in query_db('SELECT * FROM CardSet WHERE creator <> ? LIMIT 5', [username])]
 
     return render_template('user.html', languages=languages, user=user, myCardSets=myCardSets,
-                           allCardSets=allCardSets, message=bannerMessage, type=type)
+                           allCardSets=allCardSets, message=bannerMessage, type=type,
+                           avatar=getAvatarColor(user['avatar']))
+
+@app.route('/user/<username>/profile')
+def profile(username):
+    user = query_db('SELECT * FROM User WHERE username = ?', [username], one=True)
+    return render_template('profile.html', user=user, avatar=getAvatarColor(user['avatar']))
 
 # TODO(tim): Change add card button ui (put it on top of the delete button)
 @app.route('/user/<username>/create')
@@ -149,7 +156,8 @@ def createSet(username, setID=None):
     return render_template('create.html', user=user, 
                                         languages=languages,
                                         categories=categories,
-                                        mode=mode)
+                                        mode=mode,
+                                        avatar=getAvatarColor(user['avatar']))
 
 @app.route('/create_set/<username>', methods=['POST'])
 def submitSetCreate(username):
@@ -171,7 +179,7 @@ def submitSetCreate(username):
 
     cursor.execute('INSERT INTO UserCollection  VALUES (?, ?)',
                     [data['creator'], setId])
-    
+
     for card in data['flashcards']:
         cursor.execute('INSERT INTO Flashcard'
                         '(word, translation, setID) VALUES'
@@ -229,7 +237,8 @@ def searchSet(username):
 
     return render_template('search.html', user=user, 
                                         languages=languages,
-                                        categories=categories)
+                                        categories=categories,
+                                        avatar=getAvatarColor(user['avatar']))
 
 
 @app.route('/advancedSearch/<username>', methods=['POST'])
@@ -272,6 +281,25 @@ def quickSearch(username):
                         [data['query']])
 
     return jsonify(results=results)
+
+
+@app.route('/getUser/<username>', methods=['GET'])
+def getUser(username):
+    user = query_db('SELECT * FROM User WHERE username = ?', [username], one=True)
+    return jsonify(user=user)
+
+
+@app.route('/editProfile/<username>', methods=['POST'])
+def submitEditProfile(username):
+    data = request.get_json()
+    cursor = get_db().cursor()
+    cursor.execute("""UPDATE User
+                      SET password = ?, firstName = ?, lastName = ?, email = ?, birthday = ?, avatar = ?
+                      WHERE username = ?""",
+                      [data['password'], data['firstName'], data['lastName'], data['email'],
+                       data['birthday'], data['avatar'], username])
+    get_db().commit()
+    return 'True'
 
 
 @app.route('/flashcards/<setID>', methods=['GET'])
@@ -318,7 +346,7 @@ def viewSet(username, setID):
                         WHERE setID = ? \
                         AND l.langID = s.language \
                         AND c.catID = s.category", [setID], one=True)
-    return render_template('browse.html', user=user, cardSet=cardSet)
+    return render_template('browse.html', user=user, cardSet=cardSet, avatar=getAvatarColor(user['avatar']))
 
 
 @app.route('/user/<username>/explore')
@@ -340,7 +368,8 @@ def exploreSets(username):
                                         languages=languages,
                                         categories=categories,
                                         title="Browsing all sets",
-                                        sets=allCardSets)
+                                        sets=allCardSets,
+                                        avatar=getAvatarColor(user['avatar']))
 
 @app.route('/user/<username>/explore/<group>/<index>')
 def exploreGroups(username, group, index):
@@ -381,7 +410,12 @@ def exploreGroups(username, group, index):
                                         categories=categories,
                                         title='Browsing "%s"' % name,
                                         sets=allCardSets,
-                                        group=group)
+                                        group=group,
+                                        avatar=getAvatarColor(user['avatar']))
+
+def getAvatarColor(avatar):
+    color = ["#F25E5E", "#F2BE6B", "#F2EE6B", "#6BF29F", "#6BB3F2", "#BBA3F4"]
+    return color[avatar-1]
 
 # starts the server 
 if __name__ == '__main__':

@@ -29,8 +29,8 @@ input[type=radio] + label {
 /* Provide a border when hovered and when the checkbox before it is checked */
 input[type=radio] + label:hover,
 input[type=radio]:checked + label {
-  border: solid 5px #5cb85c;
-  box-shadow: 0 0 1px #5cb85c; /* Soften the jagged edge */
+  border: solid 5px #595959;
+  box-shadow: 0 0 1px #595959; /* Soften the jagged edge */
 }
 
 /*
@@ -48,5 +48,10 @@ input[type=radio]:checked + label:after {
   bottom: 0;
   right: 0;
   margin: auto;
-  color: #5cb85c;
+  color: #595959;
+}
+
+h5 {
+  margin-left: 5px;
+  margin-top: 5px;
 }
